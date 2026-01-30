@@ -1,0 +1,77 @@
+[gd_scene format=3 uid="uid://o32a65ib7pax"]
+
+[ext_resource type="Script" uid="uid://yqo47pwygwpe" path="res://scripts/ship.gd" id="1_l3rv8"]
+[ext_resource type="Script" uid="uid://d3su6ugincm7y" path="res://scripts/camera_rig.gd" id="2_4cq66"]
+[ext_resource type="Script" uid="uid://b2gystak5a60w" path="res://scripts/lampe.gd" id="2_78o8j"]
+[ext_resource type="Script" uid="uid://lo3j2tj8q4gm" path="res://scripts/camera_3d.gd" id="3_v4325"]
+[ext_resource type="Script" uid="uid://c6jh4jjaywuxk" path="res://scripts/ampoule.gd" id="3_xpsff"]
+[ext_resource type="Script" uid="uid://dsmg2hfj6w2c5" path="res://scripts/grapin_zone.gd" id="6_xpsff"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_4icm7"]
+size = Vector3(1, 1, 2)
+
+[sub_resource type="BoxMesh" id="BoxMesh_v4325"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_v4325"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_c3vuw"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_78o8j"]
+
+[node name="Ship" type="RigidBody3D" unique_id=1624201241]
+mass = 1.5
+gravity_scale = 0.0
+linear_damp = 2.5
+script = ExtResource("1_l3rv8")
+max_speed = 500.0
+acceleration = 0.2
+brake = 1.0
+pitch_speed = 2.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1276985052]
+shape = SubResource("BoxShape3D_4icm7")
+
+[node name="ShipMeshBlock" type="MeshInstance3D" parent="." unique_id=1555815513]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 2, 0, 0, 0)
+mesh = SubResource("BoxMesh_v4325")
+
+[node name="Lampe" type="MeshInstance3D" parent="." unique_id=1613509196]
+transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0)
+mesh = SubResource("CylinderMesh_v4325")
+script = ExtResource("2_78o8j")
+
+[node name="Ampoule" type="MeshInstance3D" parent="Lampe" unique_id=782347937]
+transform = Transform3D(1.5, 0, 0, 0, -6.556708e-08, 1.5, 0, -1.5, -6.556708e-08, 0, 1.1415212, -0.8941269)
+mesh = SubResource("CapsuleMesh_c3vuw")
+script = ExtResource("3_xpsff")
+
+[node name="RayCast3D" type="RayCast3D" parent="Lampe" unique_id=1217423514]
+transform = Transform3D(1, 0, 0, 0, -4.3711385e-08, -0.99999994, 0, 0.99999994, -4.3711385e-08, 0, 1.095809, -2.3407218)
+target_position = Vector3(0, -150, 0)
+
+[node name="SpringArm3D" type="SpringArm3D" parent="." unique_id=1458489845]
+collision_mask = 2
+spring_length = 5.0
+script = ExtResource("2_4cq66")
+
+[node name="Camera3D" type="Camera3D" parent="SpringArm3D" unique_id=2028794078]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5)
+current = true
+fov = 90.0
+script = ExtResource("3_v4325")
+
+[node name="Marker3D" type="Marker3D" parent="SpringArm3D/Camera3D" unique_id=1012932566]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -35.47993)
+gizmo_extents = 1.61
+
+[node name="Grapin" type="Node3D" parent="." unique_id=880503096]
+transform = Transform3D(2.5, 0, 0, 0, 1.7, 0, 0, 0, 2, 0, 0, 2.0113099)
+
+[node name="GrapinZone" type="Area3D" parent="Grapin" unique_id=856939176]
+script = ExtResource("6_xpsff")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Grapin/GrapinZone" unique_id=2007083288]
+shape = SubResource("BoxShape3D_78o8j")
+
+[connection signal="body_entered" from="Grapin/GrapinZone" to="Grapin/GrapinZone" method="_on_body_entered"]
+[connection signal="body_exited" from="Grapin/GrapinZone" to="Grapin/GrapinZone" method="_on_body_exited"]

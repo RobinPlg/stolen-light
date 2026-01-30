@@ -1,0 +1,43 @@
+[gd_scene format=3 uid="uid://bpin0d4s4jhdn"]
+
+[ext_resource type="PackedScene" uid="uid://o32a65ib7pax" path="res://ship.tscn" id="1_m71di"]
+[ext_resource type="Texture2D" uid="uid://b5u5kc4ivh6hh" path="res://HDRI/HDR_rich_blue_nebulae_1.hdr" id="1_v54ux"]
+[ext_resource type="PackedScene" uid="uid://4y07leij14y1" path="res://Grapin.tscn" id="3_exmpl"]
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_exmpl"]
+panorama = ExtResource("1_v54ux")
+
+[sub_resource type="Sky" id="Sky_2bek1"]
+sky_material = SubResource("PanoramaSkyMaterial_exmpl")
+
+[sub_resource type="Environment" id="Environment_vkgmu"]
+background_mode = 2
+background_energy_multiplier = 10.0
+sky = SubResource("Sky_2bek1")
+
+[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_e1qsd"]
+
+[node name="SpaceTest" type="Node3D" unique_id=1828726740]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1908490967]
+environment = SubResource("Environment_vkgmu")
+camera_attributes = SubResource("CameraAttributesPractical_e1qsd")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="." unique_id=1179666850]
+transform = Transform3D(95.56757, 0, 0, 0, 95.56757, 0, 0, 0, 95.56757, 0, 7.38666, -504.3875)
+
+[node name="Ship" parent="." unique_id=1624201241 instance=ExtResource("1_m71di")]
+
+[node name="NodeGrapinShip" type="Node3D" parent="Ship" unique_id=337101839]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.0557072)
+
+[node name="Grapin" parent="." unique_id=462652768 node_paths=PackedStringArray("ship") instance=ExtResource("3_exmpl")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.8291287)
+ship = NodePath("../Ship")
+ship_hook_path = NodePath("../Ship/NodeGrapinShip")
+trailer_hook_path = NodePath("NodeGrapin")
+follow_strength = 1.0
+velocity_lerp = 0.8
+
+[node name="NodeGrapin" type="Node3D" parent="Grapin" unique_id=1358890529]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.5)

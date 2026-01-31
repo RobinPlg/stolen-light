@@ -21,54 +21,80 @@ var forward_speed : float= 0.0
 var pitch_input : float= 0.0
 var roll_input : float= 0.0
 var yaw_input : float= 0.0
-var springarm_length : float= 5.0
-var max_springarm_length : float= 6.0
-var min_springarm_length : float= 4.0
+@export var springarm_length: float = 5.0
+@export var base_springarm_length: float = 5.0
+@export var max_base_length: float = 25.0
+@export var max_springarm_length : float= 6.0
+@export var min_springarm_length : float= 4.0
 var return_to_springarm_length : bool= false
 var high_speed : bool= false
 var light_mode_state: bool 
 
 func get_input(delta: float) -> void:
+	# --- Accélération ---
 	if Input.is_action_pressed("throttle_up"):
 		high_speed = false
 		forward_speed = lerp(forward_speed, max_speed, acceleration * delta)
-		springarm.spring_length = lerp(springarm.spring_length, max_springarm_length, 4.0 * delta)
+		springarm.spring_length = lerp(
+			springarm.spring_length,
+			base_springarm_length + 1.0,  # recul léger de la caméra
+			4.0 * delta
+		)
 		camera.fov = lerp(camera.fov, 110.0, 2.0 * delta)
 		if forward_speed < 150.0:
 			camera.shake()
+
 	if Input.is_action_just_released("throttle_up"):
+		return_to_springarm_length = true
 		if forward_speed > 250.0:
 			high_speed = true
-			return_to_springarm_length = true
-		else:
-			return_to_springarm_length = true
-		
+
+	# --- Décélération ---
 	if Input.is_action_pressed("throttle_down"):
 		forward_speed = lerp(forward_speed, min_speed, acceleration * delta)
-		springarm.spring_length = lerp(springarm.spring_length, min_springarm_length, 4.0 * delta)
+		springarm.spring_length = lerp(
+			springarm.spring_length,
+			base_springarm_length - 1.0,  # avancer légèrement la caméra
+			4.0 * delta
+		)
 		camera.fov = lerp(camera.fov, 75.0, 2.0 * delta)
 		if forward_speed > -80.0:
 			camera.shake()
-		
+
 	if Input.is_action_just_released("throttle_down"):
-			return_to_springarm_length = true
-		
+		return_to_springarm_length = true
+
+	# --- Stabilisation ---
 	if Input.is_action_pressed("stabilize"):
 		forward_speed = lerp(forward_speed, 0.0, brake * delta)
 		angular_damp = 8.0
-		springarm.spring_length = lerp(springarm.spring_length, min_springarm_length, 4.0 * delta)
+		springarm.spring_length = lerp(
+			springarm.spring_length,
+			base_springarm_length,
+			4.0 * delta
+		)
 		if forward_speed > 5.0:
 			camera.fov = lerp(camera.fov, 75.0, 2.0 * delta)
 			camera.shake()
+
 	if Input.is_action_just_released("stabilize"):
 		return_to_springarm_length = true
-		
+
+	# --- Retour à la distance de base selon la planète ---
 	if return_to_springarm_length:
-		springarm.spring_length = lerp(springarm.spring_length, 5.0, 4.0 * delta)
+		# Déterminer la distance de base selon la planète accrochée
+		if grapin.is_planete_here and grapin.planete_ready_to_grab.planete_arrimee:
+			if grapin.planete_ready_to_grab.is_in_group("planete-grosse"):
+				springarm.spring_length = lerp(springarm.spring_length,30.0,1.0)
+			else:
+				springarm.spring_length = lerp(springarm.spring_length,5.0,4.0 * delta)
+		
 		camera.fov = lerp(camera.fov, 90.0, 2.0 * delta)
-		if abs(springarm.spring_length - 5.0) < 0.01:
+
+		if abs(springarm.spring_length - base_springarm_length) < 0.01:
 			return_to_springarm_length = false
-	
+
+	# --- High speed correction ---
 	if high_speed:
 		forward_speed += (250.0 - forward_speed) * 0.03
 		if forward_speed <= 250.0:
@@ -77,7 +103,6 @@ func get_input(delta: float) -> void:
 	if Input.is_action_just_pressed("grab_planete") and grapin.is_planete_here:
 		grapin.planete_ready_to_grab.ship = self
 		print("planète arrimée")
-		
 		
 	pitch_input = lerp(pitch_input, Input.get_action_strength("pitch_up") - Input.get_action_strength("pitch_down"), input_response * delta)
 	roll_input = lerp(roll_input, Input.get_action_strength("roll_left") - Input.get_action_strength("roll_right"), input_response * delta)

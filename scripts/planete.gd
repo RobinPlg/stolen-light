@@ -13,7 +13,7 @@ var ship: RigidBody3D
 
 var ship_hook: Node3D
 var planete_hook: Node3D
-var planete_arrimee : bool
+@export var planete_arrimee : bool
 
 
 func _ready()-> void:

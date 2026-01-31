@@ -45,7 +45,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.5606422)
 
 [node name="Planete" parent="." unique_id=462652768 instance=ExtResource("3_exmpl")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3.423617)
-linear_damp = 0.0
 ship_hook_path = NodePath("../Ship/NodeGrapinShip")
 planete_hook_path = NodePath("NodeGrapin")
 
@@ -110,12 +109,8 @@ script = ExtResource("5_vkgmu")
 
 [node name="PlaneteGrosse" parent="." unique_id=1141980245 instance=ExtResource("6_e1qsd")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.291776, 0, 4.7485037)
-mass = 0.1
-linear_damp = 0.0
-angular_damp = 0.0
 ship_hook_path = NodePath("../Ship/NodeGrapinShip")
 planete_hook_path = NodePath("NodeGrapin2")
-follow_strength = 0.2
 
 [node name="NodeGrapin2" type="Node3D" parent="PlaneteGrosse" unique_id=944601967]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -5.991356)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.600355)

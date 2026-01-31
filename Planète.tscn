@@ -9,7 +9,6 @@
 [node name="PlaneteRigidBody" type="RigidBody3D" unique_id=462652768 groups=["planete"]]
 mass = 0.1
 gravity_scale = 0.0
-linear_damp = 1.0
 script = ExtResource("1_oay4s")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1745756458]

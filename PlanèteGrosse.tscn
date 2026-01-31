@@ -7,12 +7,10 @@ radius = 4.0
 
 [sub_resource type="SphereMesh" id="SphereMesh_jw8di"]
 
-[node name="PlaneteRigidBody" type="RigidBody3D" unique_id=462652768 groups=["planete"]]
+[node name="PlaneteRigidBody" type="RigidBody3D" unique_id=462652768 groups=["planete", "planete-grosse"]]
 axis_lock_linear_z = true
-mass = 0.2
+mass = 0.1
 gravity_scale = 0.0
-linear_damp = 1.0
-angular_damp = 2.0
 script = ExtResource("1_t5m4e")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1745756458]

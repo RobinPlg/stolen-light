@@ -18,20 +18,27 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	var rotation : Vector3 = camera_rotation.get_camera_rotation()
 	var cam_transform: Transform3D = Transform3D.IDENTITY
+	var throttle_up_strength := Input.get_action_strength("throttle_up_manette")
+	var throttle_down_strength := Input.get_action_strength("throttle_down_manette")
 	
 	check_planete()
 	
 	if Input.is_action_pressed("throttle_up"):
-		offset = lerp(offset, base_offset + Vector3(0, 0, 1), 4.0 * delta)
+		offset = lerp(offset, base_offset + Vector3(0, 0, 1), delta)
 		camera.fov = lerp(camera.fov, 100.0, 2.0 * delta)
+	if Input.is_action_pressed("throttle_up_manette") and throttle_up_strength > 0.5:
+		offset = lerp(offset, base_offset + Vector3(0, 0, 1), delta)
+		camera.fov = lerp(camera.fov, 100.0, 2.0 * delta)
+	if Input.is_action_pressed("throttle_down_manette") and throttle_down_strength > 0.5:
+		offset = lerp(offset, base_offset - Vector3(0, 0, 1), delta) 
+		camera.fov = lerp(camera.fov, 80.0, 2.0 * delta)
 	if Input.is_action_pressed("throttle_down"):
-		offset = lerp(offset, base_offset - Vector3(0, 0, 1), 4.0 * delta) 
-		camera.fov = lerp(camera.fov,80.0, 2.0 * delta)
+		offset = lerp(offset, base_offset - Vector3(0, 0, 1), delta) 
+		camera.fov = lerp(camera.fov, 80.0, 2.0 * delta)
 	if Input.is_action_pressed("stabilize"):
-		offset = lerp(offset, base_offset - Vector3(0, 0, 1), 4.0 * delta) 
+		offset = lerp(offset, base_offset - Vector3(0, 0, 1), 2.0 * delta) 
 		camera.fov = lerp(camera.fov, 80.0, 2.0 * delta)
 
-		
 	return_to_base_offset(delta)
 	
 	cam_transform = cam_transform.translated(offset)

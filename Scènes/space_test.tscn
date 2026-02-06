@@ -1,14 +1,15 @@
 [gd_scene format=3 uid="uid://bpin0d4s4jhdn"]
 
-[ext_resource type="PackedScene" uid="uid://o32a65ib7pax" path="res://ship.tscn" id="1_m71di"]
+[ext_resource type="PackedScene" uid="uid://o32a65ib7pax" path="res://Scènes/ship.tscn" id="1_m71di"]
 [ext_resource type="Texture2D" uid="uid://b5u5kc4ivh6hh" path="res://HDRI/HDR_rich_blue_nebulae_1.hdr" id="1_v54ux"]
-[ext_resource type="PackedScene" uid="uid://4y07leij14y1" path="res://Planète.tscn" id="3_exmpl"]
-[ext_resource type="Script" uid="uid://chus5qrkg8fjk" path="res://scripts/ui_ship.gd" id="4_2bek1"]
-[ext_resource type="Script" uid="uid://bctjie4un4pfj" path="res://scripts/rotation_camera_3d.gd" id="5_g7igd"]
-[ext_resource type="Script" uid="uid://w7fc4w8a4o6w" path="res://scripts/ui_reticle.gd" id="5_vkgmu"]
-[ext_resource type="PackedScene" uid="uid://dh8v06mfcnkc4" path="res://PlanèteGrosse.tscn" id="6_e1qsd"]
-[ext_resource type="Script" uid="uid://ccpu4ir7ctvmb" path="res://scripts/position_camera_3d.gd" id="6_of7rq"]
-[ext_resource type="Script" uid="uid://lo3j2tj8q4gm" path="res://scripts/camera_3d.gd" id="7_btfq4"]
+[ext_resource type="PackedScene" uid="uid://4y07leij14y1" path="res://Scènes/Planète.tscn" id="3_exmpl"]
+[ext_resource type="Script" uid="uid://chus5qrkg8fjk" path="res://Scripts/ui_ship.gd" id="4_2bek1"]
+[ext_resource type="Script" uid="uid://bctjie4un4pfj" path="res://Scripts/rotation_camera_3d.gd" id="5_g7igd"]
+[ext_resource type="Script" uid="uid://w7fc4w8a4o6w" path="res://Scripts/ui_reticle.gd" id="5_vkgmu"]
+[ext_resource type="PackedScene" uid="uid://dh8v06mfcnkc4" path="res://Scènes/PlanèteGrosse.tscn" id="6_e1qsd"]
+[ext_resource type="Script" uid="uid://ccpu4ir7ctvmb" path="res://Scripts/position_camera_3d.gd" id="6_of7rq"]
+[ext_resource type="Script" uid="uid://lo3j2tj8q4gm" path="res://Scripts/camera_3d.gd" id="7_btfq4"]
+[ext_resource type="Texture2D" uid="uid://ced4omuaca6fm" path="res://Images/44748.png" id="10_tmkmv"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_exmpl"]
 panorama = ExtResource("1_v54ux")
@@ -49,13 +50,15 @@ planete_hook_path = NodePath("NodeGrapin2")
 [node name="NodeGrapin2" type="Node3D" parent="PlaneteGrosse" unique_id=944601967]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.600355)
 
-[node name="Planete" parent="." unique_id=462652768 instance=ExtResource("3_exmpl")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 13.221184)
+[node name="PlaneteRigidBody" parent="." unique_id=462652768 instance=ExtResource("3_exmpl")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.7884195)
 ship_hook_path = NodePath("../Ship/NodeGrapinShip")
-planete_hook_path = NodePath("NodeGrapin")
+planete_hook_path = NodePath("NodeGrapin2")
+follow_strength = 0.6
+rotation_follow = 0.2
 
-[node name="NodeGrapin" type="Node3D" parent="Planete" unique_id=1358890529]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.5)
+[node name="NodeGrapin2" type="Node3D" parent="PlaneteRigidBody" unique_id=1561928808]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.78238416)
 
 [node name="Ship" parent="." unique_id=1624201241 instance=ExtResource("1_m71di")]
 continuous_cd = true
@@ -84,7 +87,7 @@ mesh = SubResource("BoxMesh_2bek1")
 transform = Transform3D(200, 0, 0, 0, 200, 0, 0, 0, 200, 1673.0446, 2391.9475, -1101.1193)
 mesh = SubResource("BoxMesh_vkgmu")
 
-[node name="Control" type="Control" parent="." unique_id=1696648322 node_paths=PackedStringArray("ship", "speedometer")]
+[node name="Control" type="Control" parent="." unique_id=1696648322]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -93,8 +96,6 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
 script = ExtResource("4_2bek1")
-ship = NodePath("../Ship")
-speedometer = NodePath("speedometer")
 
 [node name="speedometer" type="Label" parent="Control" unique_id=1320189058]
 layout_mode = 1
@@ -127,3 +128,16 @@ offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("5_vkgmu")
+
+[node name="PlaneteLogo" type="TextureRect" parent="Control" unique_id=1631297661]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 50.0
+offset_top = -68.0
+offset_right = 75.0
+offset_bottom = -42.99994
+grow_vertical = 0
+texture = ExtResource("10_tmkmv")
+expand_mode = 1

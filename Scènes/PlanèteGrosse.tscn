@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dh8v06mfcnkc4"]
 
-[ext_resource type="Script" uid="uid://c1m834k6y8met" path="res://scripts/planete.gd" id="1_t5m4e"]
+[ext_resource type="Script" uid="uid://c1m834k6y8met" path="res://Scripts/planete.gd" id="1_t5m4e"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_jw8di"]
 radius = 4.0
@@ -12,7 +12,7 @@ axis_lock_linear_z = true
 mass = 0.1
 gravity_scale = 0.0
 script = ExtResource("1_t5m4e")
-follow_strength = 0.6
+follow_strength = 0.4
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1745756458]
 shape = SubResource("SphereShape3D_jw8di")

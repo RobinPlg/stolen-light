@@ -1,7 +1,7 @@
 extends Camera3D
 
 @export var random_strength: float= 0.01
-@export var shake_fade: float = 5.0
+@export var shake_fade: float = 2.0
 
 var shake_strength: float = 0.0
 var initial_transform: Transform3D

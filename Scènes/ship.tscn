@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://o32a65ib7pax"]
 
-[ext_resource type="Script" uid="uid://yqo47pwygwpe" path="res://scripts/ship.gd" id="1_l3rv8"]
-[ext_resource type="Script" uid="uid://dsmg2hfj6w2c5" path="res://scripts/grapin_zone.gd" id="6_xpsff"]
+[ext_resource type="Script" uid="uid://yqo47pwygwpe" path="res://Scripts/ship.gd" id="1_l3rv8"]
+[ext_resource type="Script" uid="uid://dsmg2hfj6w2c5" path="res://Scripts/grapin_zone.gd" id="6_xpsff"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_4icm7"]
 size = Vector3(1, 1, 2)
@@ -28,7 +28,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 2, 0, 0, 0)
 mesh = SubResource("BoxMesh_v4325")
 
 [node name="Grapin" type="Node3D" parent="." unique_id=880503096]
-transform = Transform3D(2.5, 0, 0, 0, 1.7, 0, 0, 0, 2, 0, 0, 2.0113099)
+transform = Transform3D(2.5, 0, 0, 0, 1.7, 0, 0, 0, 3, 0, 0, 2.514169)
 
 [node name="GrapinZone" type="Area3D" parent="Grapin" unique_id=856939176]
 script = ExtResource("6_xpsff")

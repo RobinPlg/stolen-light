@@ -32,9 +32,7 @@ func _physics_process(_delta: float)-> void:
 	
 	_lock_to_ship()
 
-# --------------------------------------------------
-# Comportement "parenté douce"
-# --------------------------------------------------
+
 func _lock_to_ship() -> void:
 	
 	planete_arrimee = true
@@ -43,20 +41,14 @@ func _lock_to_ship() -> void:
 	var desired_global: Transform3D = ship_hook.global_transform
 	var locked_transform: Transform3D = desired_global * planete_hook.transform.affine_inverse()
 
-	global_position = global_position.lerp(
-		locked_transform.origin,
-		follow_strength
-	)
+	global_position = global_position.lerp(locked_transform.origin, follow_strength)
 
-	# --- Rotation (semi-libre) ---
+
 	var current_basis := global_transform.basis
 	var target_basis := locked_transform.basis
 
 	# interpolation partielle de la rotation
-	global_transform.basis = current_basis.slerp(
-		target_basis,
-		0.15  # plus bas = plus libre
-	)
+	global_transform.basis = current_basis.slerp(target_basis, 0.15)
 
 	# --- Vitesses ---
 	linear_velocity = linear_velocity.lerp(ship.linear_velocity, velocity_lerp)

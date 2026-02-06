@@ -26,44 +26,84 @@ var planete_arrimee: RigidBody3D = null
 
 func get_input(delta: float) -> void:
 
+	var throttle_forward :float = 0.0
+	var throttle_reverse :float = 0.0
+
+	# Clavier
 	if Input.is_action_pressed("throttle_up"):
-		high_speed = false
-		forward_speed = lerp(forward_speed, max_speed, acceleration * delta)
-		if forward_speed < 150.0:
-			camera.shake()
+		throttle_forward = 1.0
+	if Input.is_action_pressed("throttle_down"):
+		throttle_reverse = 1.0
 
-	elif Input.is_action_pressed("throttle_down"):
-		forward_speed = lerp(forward_speed, min_speed, acceleration * delta)
-		if forward_speed > -80.0:
-			camera.shake()
+	# Manette (analogique)
+	throttle_forward = max(
+		throttle_forward,
+		Input.get_action_strength("throttle_up_manette")
+	)
+	throttle_reverse = max(
+		throttle_reverse,
+		Input.get_action_strength("throttle_down_manette")
+	)
 
-	elif Input.is_action_pressed("stabilize"):
-		forward_speed = lerp(forward_speed, 0.0, brake * delta)
+	# Throttle final -1 → +1
+	var throttle :float = throttle_forward - throttle_reverse
+
+	# Courbe de réponse douce
+	throttle = sign(throttle) * pow(abs(throttle), 1.4)
+
+	# PARAMÈTRES DE MOUVEMENT
+	var accel :float= acceleration * 200.0
+
+	if Input.is_action_pressed("stabilize"): 
+		forward_speed = lerp(forward_speed, 0.0, brake * delta) 
 		angular_damp = 8.0
-		if forward_speed > 5.0:
-			camera.shake()
 
-	elif Input.is_action_just_released("stabilize") or Input.is_action_just_released("throttle_down") or Input.is_action_just_released("throttle_up"):
+	elif abs(throttle) > 0.02:
+		# Accélération ou marche arrière
+		forward_speed += throttle * accel * delta
+		high_speed = false
+
+	# ===============================
+	# LIMITES DE VITESSE
+	# ===============================
+	forward_speed = clamp(
+		forward_speed,
+		min_speed,   # négatif
+		max_speed
+	)
+
+	if Input.is_action_just_released("stabilize") \
+	or Input.is_action_just_released("throttle_down") \
+	or Input.is_action_just_released("throttle_up") \
+	or Input.is_action_just_released("throttle_up_manette") \
+	or Input.is_action_just_released("throttle_down_manette"):
 		if forward_speed > 250.0:
 			high_speed = true
-		
+
 	if high_speed:
 		forward_speed += (250.0 - forward_speed) * 0.03
 		if forward_speed <= 250.0:
 			high_speed = false
+
+	# CAMERA SHAKE
+	if abs(throttle) > 0.1 or Input.is_action_pressed("stabilize") :
+		if forward_speed < 3.0 and forward_speed > -3.0 :
+			return
+		if forward_speed < 130.0 and forward_speed > -50.0 :
+			camera.shake()
 		
 		
 	pitch_input = lerp(pitch_input, Input.get_action_strength("pitch_up") - Input.get_action_strength("pitch_down"), input_response * delta)
 	roll_input = lerp(roll_input, Input.get_action_strength("roll_left") - Input.get_action_strength("roll_right"), input_response * delta)
 	yaw_input = lerp(yaw_input, Input.get_action_strength("yaw_left") - Input.get_action_strength("yaw_right"), input_response * delta)
 
-	if Input.is_action_just_pressed("grab_planete") and grapin.is_planete_here :
+	if Input.is_action_just_pressed("grab_planete") :
 		
 		if planete_arrimee:
 			planete_arrimee.ship = null
 			planete_arrimee = null
 			print("planète désarrimée")
-		else : 
+		elif grapin.is_planete_here : 
 			planete_arrimee = grapin.planete_ready_to_grab
 			planete_arrimee.ship = self
 			print("planète arrimée")

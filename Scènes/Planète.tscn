@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://4y07leij14y1"]
 
-[ext_resource type="Script" uid="uid://c1m834k6y8met" path="res://scripts/planete.gd" id="1_oay4s"]
+[ext_resource type="Script" uid="uid://c1m834k6y8met" path="res://Scripts/planete.gd" id="1_oay4s"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_jw8di"]
 
@@ -9,6 +9,7 @@
 [node name="PlaneteRigidBody" type="RigidBody3D" unique_id=462652768 groups=["planete", "planete-petite"]]
 mass = 0.1
 gravity_scale = 0.0
+continuous_cd = true
 script = ExtResource("1_oay4s")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1745756458]

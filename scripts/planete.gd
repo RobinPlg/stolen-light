@@ -19,24 +19,18 @@ var planete_hook: Node3D
 func _ready()-> void:
 	
 	planete_hook = get_node(planete_hook_path)
+	ship_hook = get_node(ship_hook_path)
 
 	gravity_scale = 0.0
 
 
 func _physics_process(_delta: float)-> void:
-	if Input.is_action_just_pressed("grab_planete") and planete_arrimee == true:
-		ship = null
+
+	if ship == null: 
 		planete_arrimee = false
-		
-	if not is_instance_valid(ship):
 		return
-
-	ship_hook = ship.get_node(ship_hook_path)
-	if not ship_hook:
-		return
-	_lock_to_ship()
 	
-
+	_lock_to_ship()
 
 # --------------------------------------------------
 # Comportement "parenté douce"
@@ -65,10 +59,7 @@ func _lock_to_ship() -> void:
 	)
 
 	# --- Vitesses ---
-	linear_velocity = linear_velocity.lerp(
-		ship.linear_velocity,
-		velocity_lerp
-	)
+	linear_velocity = linear_velocity.lerp(ship.linear_velocity, velocity_lerp)
 
 	# amortissement angulaire
 	angular_velocity *= angular_damping

@@ -5,6 +5,6 @@ extends Control
 var speed : float
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(_delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	speed = ship.forward_speed
 	speedometer.text = str(int(speed), " u/s") 

@@ -4,11 +4,8 @@
 [ext_resource type="Texture2D" uid="uid://b5u5kc4ivh6hh" path="res://HDRI/HDR_rich_blue_nebulae_1.hdr" id="1_v54ux"]
 [ext_resource type="PackedScene" uid="uid://4y07leij14y1" path="res://Planète.tscn" id="3_exmpl"]
 [ext_resource type="Script" uid="uid://chus5qrkg8fjk" path="res://scripts/ui_ship.gd" id="4_2bek1"]
-[ext_resource type="Script" uid="uid://bctjie4un4pfj" path="res://scripts/rotation_camera_3d.gd" id="5_g7igd"]
 [ext_resource type="Script" uid="uid://w7fc4w8a4o6w" path="res://scripts/ui_reticle.gd" id="5_vkgmu"]
 [ext_resource type="PackedScene" uid="uid://dh8v06mfcnkc4" path="res://PlanèteGrosse.tscn" id="6_e1qsd"]
-[ext_resource type="Script" uid="uid://ccpu4ir7ctvmb" path="res://scripts/position_camera_3d.gd" id="6_of7rq"]
-[ext_resource type="Script" uid="uid://lo3j2tj8q4gm" path="res://scripts/camera_3d.gd" id="7_btfq4"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_exmpl"]
 panorama = ExtResource("1_v54ux")
@@ -39,38 +36,20 @@ environment = SubResource("Environment_vkgmu")
 camera_attributes = SubResource("CameraAttributesPractical_e1qsd")
 
 [node name="CSGBox3D" type="CSGBox3D" parent="." unique_id=1179666850]
-transform = Transform3D(95.56757, 0, 0, 0, 95.56757, 0, 0, 0, 95.56757, -308.5714, 7.38666, -504.3875)
+transform = Transform3D(95.56757, 0, 0, 0, 95.56757, 0, 0, 0, 95.56757, 0, 7.38666, -504.3875)
 
-[node name="PlaneteGrosse" parent="." unique_id=1141980245 instance=ExtResource("6_e1qsd")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.291776, 0, 4.7485037)
-ship_hook_path = NodePath("../Ship/NodeGrapinShip")
-planete_hook_path = NodePath("NodeGrapin2")
+[node name="Ship" parent="." unique_id=1624201241 instance=ExtResource("1_m71di")]
 
-[node name="NodeGrapin2" type="Node3D" parent="PlaneteGrosse" unique_id=944601967]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.600355)
+[node name="NodeGrapinShip" type="Node3D" parent="Ship" unique_id=337101839]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.5606422)
 
 [node name="Planete" parent="." unique_id=462652768 instance=ExtResource("3_exmpl")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 13.221184)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3.423617)
 ship_hook_path = NodePath("../Ship/NodeGrapinShip")
 planete_hook_path = NodePath("NodeGrapin")
 
 [node name="NodeGrapin" type="Node3D" parent="Planete" unique_id=1358890529]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.5)
-
-[node name="Ship" parent="." unique_id=1624201241 instance=ExtResource("1_m71di")]
-continuous_cd = true
-
-[node name="NodeGrapinShip" type="Node3D" parent="Ship" unique_id=337101839]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.5606422)
-
-[node name="NodeCamera3D" type="Node3D" parent="Ship" unique_id=491686393]
-script = ExtResource("5_g7igd")
-
-[node name="PositionCamera3D" type="Node3D" parent="Ship/NodeCamera3D" unique_id=355992604]
-script = ExtResource("6_of7rq")
-
-[node name="Camera3D" type="Camera3D" parent="Ship/NodeCamera3D/PositionCamera3D" unique_id=1904995818]
-script = ExtResource("7_btfq4")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=2095674727]
 transform = Transform3D(50, 0, 0, 0, 50, 0, 0, 0, 50, -718.4547, -326.46838, 701.47217)
@@ -127,3 +106,11 @@ offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("5_vkgmu")
+
+[node name="PlaneteGrosse" parent="." unique_id=1141980245 instance=ExtResource("6_e1qsd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.291776, 0, 4.7485037)
+ship_hook_path = NodePath("../Ship/NodeGrapinShip")
+planete_hook_path = NodePath("NodeGrapin2")
+
+[node name="NodeGrapin2" type="Node3D" parent="PlaneteGrosse" unique_id=944601967]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -4.600355)

@@ -4,11 +4,9 @@
 [ext_resource type="Texture2D" uid="uid://b5u5kc4ivh6hh" path="res://HDRI/HDR_rich_blue_nebulae_1.hdr" id="1_v54ux"]
 [ext_resource type="PackedScene" uid="uid://4y07leij14y1" path="res://Planète.tscn" id="3_exmpl"]
 [ext_resource type="Script" uid="uid://chus5qrkg8fjk" path="res://scripts/ui_ship.gd" id="4_2bek1"]
-[ext_resource type="Script" uid="uid://bctjie4un4pfj" path="res://scripts/rotation_camera_3d.gd" id="5_g7igd"]
 [ext_resource type="Script" uid="uid://w7fc4w8a4o6w" path="res://scripts/ui_reticle.gd" id="5_vkgmu"]
 [ext_resource type="PackedScene" uid="uid://dh8v06mfcnkc4" path="res://PlanèteGrosse.tscn" id="6_e1qsd"]
-[ext_resource type="Script" uid="uid://ccpu4ir7ctvmb" path="res://scripts/position_camera_3d.gd" id="6_of7rq"]
-[ext_resource type="Script" uid="uid://lo3j2tj8q4gm" path="res://scripts/camera_3d.gd" id="7_btfq4"]
+[ext_resource type="PackedScene" uid="uid://ck10pe2b8x76e" path="res://3d_camera.tscn" id="7_sn7j3"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_exmpl"]
 panorama = ExtResource("1_v54ux")
@@ -63,14 +61,12 @@ continuous_cd = true
 [node name="NodeGrapinShip" type="Node3D" parent="Ship" unique_id=337101839]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.5606422)
 
-[node name="NodeCamera3D" type="Node3D" parent="Ship" unique_id=491686393]
-script = ExtResource("5_g7igd")
-
-[node name="PositionCamera3D" type="Node3D" parent="Ship/NodeCamera3D" unique_id=355992604]
-script = ExtResource("6_of7rq")
-
-[node name="Camera3D" type="Camera3D" parent="Ship/NodeCamera3D/PositionCamera3D" unique_id=1904995818]
-script = ExtResource("7_btfq4")
+[node name="NodeCamera3D" parent="." unique_id=1204372951 node_paths=PackedStringArray("ship") instance=ExtResource("7_sn7j3")]
+ship = NodePath("../Ship")
+offset = null
+smooth_speed = null
+turn_rate = null
+mouse_sensitivity = null
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=2095674727]
 transform = Transform3D(50, 0, 0, 0, 50, 0, 0, 0, 50, -718.4547, -326.46838, 701.47217)

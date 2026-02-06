@@ -1,6 +1,5 @@
 extends Camera3D
 
-
 @export var random_strength: float= 0.01
 @export var shake_fade: float = 5.0
 
@@ -18,7 +17,7 @@ func random_offset()-> Vector3:
 		0.0
 	)
 	
-func _process(delta: float) -> void:
+func _physics_process(delta: float) -> void:
 	if shake_strength > 0:
 		shake_strength = lerpf(shake_strength, 0.0 , shake_fade * delta)
 		self.transform.origin = initial_transform.origin + random_offset()

@@ -12,6 +12,7 @@ axis_lock_linear_z = true
 mass = 0.1
 gravity_scale = 0.0
 script = ExtResource("1_t5m4e")
+follow_strength = 0.6
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1745756458]
 shape = SubResource("SphereShape3D_jw8di")

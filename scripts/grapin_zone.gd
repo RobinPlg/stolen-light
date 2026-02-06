@@ -3,9 +3,6 @@ extends Area3D
 var is_planete_here: bool
 var planete_ready_to_grab : RigidBody3D = null
 
-func _process(delta: float) -> void:
-	pass
-	
 func _on_body_entered(body : RigidBody3D) -> void:
 	if body.is_in_group("planete"):
 		print("planète détecté")

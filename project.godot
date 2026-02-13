@@ -29,6 +29,7 @@ version_control/autoload_on_startup=true
 planete=""
 planete-grosse=""
 planete-petite=""
+orbite=""
 
 [input]
 
@@ -130,7 +131,7 @@ grab_planete={
 [physics]
 
 3d/physics_engine="Jolt Physics"
-3d/default_gravity=9.799999999999995
+3d/default_gravity=0.0
 
 [rendering]
 

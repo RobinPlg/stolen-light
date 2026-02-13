@@ -1,16 +1,17 @@
 [gd_scene format=3 uid="uid://dh8v06mfcnkc4"]
 
 [ext_resource type="Script" uid="uid://c1m834k6y8met" path="res://Scripts/planete.gd" id="1_t5m4e"]
+[ext_resource type="ArrayMesh" uid="uid://vvrmtu00x8u7" path="res://Planet tuto V1.obj" id="2_k0e2j"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_jw8di"]
 radius = 4.0
-
-[sub_resource type="SphereMesh" id="SphereMesh_jw8di"]
 
 [node name="PlaneteRigidBody" type="RigidBody3D" unique_id=462652768 groups=["planete", "planete-grosse"]]
 axis_lock_linear_z = true
 mass = 0.1
 gravity_scale = 0.0
+contact_monitor = true
+max_contacts_reported = 5
 script = ExtResource("1_t5m4e")
 follow_strength = 0.4
 
@@ -18,6 +19,9 @@ follow_strength = 0.4
 shape = SubResource("SphereShape3D_jw8di")
 
 [node name="PlaneteMesh" type="MeshInstance3D" parent="." unique_id=1837679391]
-transform = Transform3D(8, 0, 0, 0, 8, 0, 0, 0, 8, 0, 0, 0)
+transform = Transform3D(3.5, 0, 0, 0, 3.5, 0, 0, 0, 3.5, -0.0015070438, 0, 0.8147845)
 layers = 2
-mesh = SubResource("SphereMesh_jw8di")
+mesh = ExtResource("2_k0e2j")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="body_exited" from="." to="." method="_on_body_exited"]

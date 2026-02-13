@@ -1,10 +1,10 @@
 [gd_scene format=3 uid="uid://4y07leij14y1"]
 
 [ext_resource type="Script" uid="uid://c1m834k6y8met" path="res://Scripts/planete.gd" id="1_oay4s"]
+[ext_resource type="ArrayMesh" uid="uid://vvrmtu00x8u7" path="res://Planet tuto V1.obj" id="2_hf4pj"]
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_jw8di"]
-
-[sub_resource type="BoxMesh" id="BoxMesh_68wom"]
+[sub_resource type="SphereShape3D" id="SphereShape3D_hf4pj"]
+radius = 1.2
 
 [node name="PlaneteRigidBody" type="RigidBody3D" unique_id=462652768 groups=["planete", "planete-petite"]]
 mass = 0.1
@@ -13,8 +13,9 @@ continuous_cd = true
 script = ExtResource("1_oay4s")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1745756458]
-shape = SubResource("BoxShape3D_jw8di")
+shape = SubResource("SphereShape3D_hf4pj")
 
 [node name="PlaneteMesh" type="MeshInstance3D" parent="." unique_id=1837679391]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.2620415)
 layers = 2
-mesh = SubResource("BoxMesh_68wom")
+mesh = ExtResource("2_hf4pj")

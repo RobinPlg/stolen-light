@@ -9,12 +9,10 @@ var return_to_base_offset_bool : bool = false
 @onready var grapin: Node3D = $"../../Grapin/GrapinZone"
 @onready var camera: Camera3D = $Camera3D
 
-# Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	offset = base_offset
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	var rotation : Vector3 = camera_rotation.get_camera_rotation()
 	var cam_transform: Transform3D = Transform3D.IDENTITY

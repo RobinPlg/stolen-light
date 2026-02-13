@@ -1,5 +1,6 @@
 extends RigidBody3D
 
+@export_category("Variables")
 @export var max_speed: float = 200.0
 @export var min_speed: float = -100.0
 @export var acceleration: float = 0.1
@@ -9,11 +10,11 @@ extends RigidBody3D
 @export var yaw_speed : float= 1.0
 @export var input_response : float= 5.0
 
-##@onready var raycast: RayCast3D = $Lampe/RayCast3D
 @onready var camera: Camera3D = $NodeCamera3D/PositionCamera3D/Camera3D
-##@onready var light : Node3D = $Lampe
-var planète : RigidBody3D
 @onready var grapin : Node3D = $Grapin/GrapinZone
+var planète : RigidBody3D
+##@onready var raycast: RayCast3D = $Lampe/RayCast3D
+##@onready var light : Node3D = $Lampe
 
 var speed : Vector3= Vector3.ZERO
 var forward_speed : float= 0.0
@@ -35,7 +36,7 @@ func get_input(delta: float) -> void:
 	if Input.is_action_pressed("throttle_down"):
 		throttle_reverse = 1.0
 
-	# Manette (analogique)
+	# Manette
 	throttle_forward = max(
 		throttle_forward,
 		Input.get_action_strength("throttle_up_manette")
@@ -45,13 +46,10 @@ func get_input(delta: float) -> void:
 		Input.get_action_strength("throttle_down_manette")
 	)
 
-	# Throttle final -1 → +1
 	var throttle :float = throttle_forward - throttle_reverse
 
-	# Courbe de réponse douce
 	throttle = sign(throttle) * pow(abs(throttle), 1.4)
-
-	# PARAMÈTRES DE MOUVEMENT
+	
 	var accel :float= acceleration * 200.0
 
 	if Input.is_action_pressed("stabilize"): 
@@ -59,16 +57,13 @@ func get_input(delta: float) -> void:
 		angular_damp = 8.0
 
 	elif abs(throttle) > 0.02:
-		# Accélération ou marche arrière
 		forward_speed += throttle * accel * delta
 		high_speed = false
 
-	# ===============================
-	# LIMITES DE VITESSE
-	# ===============================
+	# Limite vitesse
 	forward_speed = clamp(
 		forward_speed,
-		min_speed,   # négatif
+		min_speed,
 		max_speed
 	)
 
@@ -101,17 +96,19 @@ func get_input(delta: float) -> void:
 		
 		if planete_arrimee:
 			planete_arrimee.ship = null
+			planete_arrimee.can_orbit = true
 			planete_arrimee = null
 			print("planète désarrimée")
 		elif grapin.is_planete_here : 
 			planete_arrimee = grapin.planete_ready_to_grab
+			planete_arrimee.can_orbit = false
 			planete_arrimee.ship = self
+			planete_arrimee.target_orbit = null
 			print("planète arrimée")
 
 func _physics_process(delta: float)->void:
 	
 	get_input(delta)
-	
 	
 	if Input.is_action_just_pressed("light_mode"):
 		light_mode_state = !light_mode_state

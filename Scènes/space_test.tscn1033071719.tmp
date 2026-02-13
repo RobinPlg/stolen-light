@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://o32a65ib7pax" path="res://Scènes/ship.tscn" id="1_m71di"]
 [ext_resource type="Texture2D" uid="uid://b5u5kc4ivh6hh" path="res://HDRI/HDR_rich_blue_nebulae_1.hdr" id="1_v54ux"]
-[ext_resource type="Script" uid="uid://dei53583sijim" path="res://Scripts/sun.gd" id="2_xvc65"]
+[ext_resource type="Script" uid="uid://dei53583sijim" path="res://Scripts/orbit.gd" id="2_xvc65"]
 [ext_resource type="PackedScene" uid="uid://4y07leij14y1" path="res://Scènes/Planète.tscn" id="3_exmpl"]
 [ext_resource type="Script" uid="uid://chus5qrkg8fjk" path="res://Scripts/ui_ship.gd" id="4_2bek1"]
 [ext_resource type="Script" uid="uid://bctjie4un4pfj" path="res://Scripts/rotation_camera_3d.gd" id="5_g7igd"]
@@ -53,29 +53,29 @@ font_size = 25
 environment = SubResource("Environment_vkgmu")
 camera_attributes = SubResource("CameraAttributesPractical_e1qsd")
 
-[node name="Area3D" type="Area3D" parent="." unique_id=2131261305 groups=["orbite"]]
+[node name="Sun" type="CSGBox3D" parent="." unique_id=1179666850]
 transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 10, -7.734375, 0, -192.608)
 script = ExtResource("2_xvc65")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D" unique_id=541328204 groups=["orbite"]]
+[node name="Area3D" type="Area3D" parent="Sun" unique_id=2131261305]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Sun/Area3D" unique_id=541328204]
 shape = SubResource("SphereShape3D_xvc65")
 
-[node name="Sun" type="CSGBox3D" parent="Area3D" unique_id=1179666850]
-
-[node name="Orbit" type="Path3D" parent="Area3D/Sun" unique_id=719912981]
+[node name="Orbit" type="Path3D" parent="Sun" unique_id=719912981]
 transform = Transform3D(-0.41310447, 0, 0.91068363, 0, 1, 0, -0.91068363, 0, -0.41310447, 0, 0, 0)
 visible = false
 curve = SubResource("Curve3D_tmkmv")
 
-[node name="PathFollow3D" type="PathFollow3D" parent="Area3D/Sun/Orbit" unique_id=1265820435]
+[node name="PathFollow3D" type="PathFollow3D" parent="Sun/Orbit" unique_id=1265820435]
 transform = Transform3D(0.70710087, 0, -0.7071006, 0, 0.9999979, 0, 0.70710075, 0, 0.7071007, 5, 0, 5)
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Area3D/Sun/Orbit/PathFollow3D" unique_id=508699345]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Sun/Orbit/PathFollow3D" unique_id=508699345]
 mesh = SubResource("CylinderMesh_xvc65")
 
 [node name="PlaneteGrosse" parent="." unique_id=1141980245 node_paths=PackedStringArray("target_orbit") instance=ExtResource("6_e1qsd")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -122.88809, 68.579865, -175.46202)
-target_orbit = NodePath("../Area3D/Sun")
+target_orbit = NodePath("../Sun")
 speed_orbit = 5.0
 distance = 100.0
 ship_hook_path = NodePath("../Ship/NodeGrapinShip")
@@ -173,6 +173,3 @@ offset_bottom = -42.99994
 grow_vertical = 0
 texture = ExtResource("10_tmkmv")
 expand_mode = 1
-
-[connection signal="body_entered" from="Area3D" to="Area3D" method="_on_body_entered"]
-[connection signal="body_exited" from="Area3D" to="Area3D" method="_on_body_exited"]

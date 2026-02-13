@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://dxepnqjsgcya3"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_fl25b"]
+radius = 5.0
+height = 10.0
+
+[sub_resource type="TorusMesh" id="TorusMesh_fl25b"]
+inner_radius = 62.0
+outer_radius = 63.527
+
+[node name="SystemeSolaire" type="Node3D" unique_id=479551428]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1878320027]
+mesh = SubResource("SphereMesh_fl25b")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="." unique_id=1712257941]
+mesh = SubResource("TorusMesh_fl25b")

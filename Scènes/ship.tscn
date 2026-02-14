@@ -13,6 +13,9 @@ size = Vector3(1, 1, 2)
 [node name="Ship" type="RigidBody3D" unique_id=1624201241]
 mass = 1.5
 gravity_scale = 0.0
+continuous_cd = true
+contact_monitor = true
+max_contacts_reported = 3
 linear_damp = 2.5
 script = ExtResource("1_l3rv8")
 max_speed = 500.0
@@ -36,5 +39,6 @@ script = ExtResource("6_xpsff")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Grapin/GrapinZone" unique_id=2007083288]
 shape = SubResource("BoxShape3D_78o8j")
 
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
 [connection signal="body_entered" from="Grapin/GrapinZone" to="Grapin/GrapinZone" method="_on_body_entered"]
 [connection signal="body_exited" from="Grapin/GrapinZone" to="Grapin/GrapinZone" method="_on_body_exited"]

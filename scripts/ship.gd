@@ -94,21 +94,23 @@ func get_input(delta: float) -> void:
 
 	if Input.is_action_just_pressed("grab_planete") :
 		
+		## Arrimage Planète
 		if planete_arrimee:
 			planete_arrimee.ship = null
 			planete_arrimee.can_orbit = true
 			planete_arrimee = null
-			print("planète désarrimée")
+			
+		## Désarrimage Planète
 		elif grapin.is_planete_here : 
 			planete_arrimee = grapin.planete_ready_to_grab
 			planete_arrimee.can_orbit = false
 			planete_arrimee.ship = self
 			planete_arrimee.target_orbit = null
-			print("planète arrimée")
 
 func _physics_process(delta: float)->void:
 	
 	get_input(delta)
+	
 	
 	if Input.is_action_just_pressed("light_mode"):
 		light_mode_state = !light_mode_state
@@ -138,3 +140,14 @@ func _physics_process(delta: float)->void:
 	##light.position.y = lerpf(light.position.y, 0.0 , 3.0 * delta) 
 	##3springarm.position.y = lerpf(springarm.position.y, 0.0 , 3.0 * delta) 
 	
+
+
+func _on_body_entered(body: Node) -> void:
+	if body is RigidBody3D:
+		# Calcul de la normale entre la planète et le vaisseau
+		var collision_normal:Vector3 = (global_position - body.global_position).normalized()
+		
+		# Rebond avec perte d'énergie (0.7 = 70% conservé)
+		linear_velocity = linear_velocity.bounce(collision_normal) * 0.7
+		
+		forward_speed *= -0.1

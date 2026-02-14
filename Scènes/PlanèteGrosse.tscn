@@ -4,12 +4,13 @@
 [ext_resource type="ArrayMesh" uid="uid://vvrmtu00x8u7" path="res://Planet tuto V1.obj" id="2_k0e2j"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_jw8di"]
-radius = 4.0
+radius = 7.5
 
 [node name="PlaneteRigidBody" type="RigidBody3D" unique_id=462652768 groups=["planete", "planete-grosse"]]
 axis_lock_linear_z = true
 mass = 0.1
 gravity_scale = 0.0
+continuous_cd = true
 contact_monitor = true
 max_contacts_reported = 5
 script = ExtResource("1_t5m4e")
@@ -19,7 +20,7 @@ follow_strength = 0.4
 shape = SubResource("SphereShape3D_jw8di")
 
 [node name="PlaneteMesh" type="MeshInstance3D" parent="." unique_id=1837679391]
-transform = Transform3D(3.5, 0, 0, 0, 3.5, 0, 0, 0, 3.5, -0.0015070438, 0, 0.8147845)
+transform = Transform3D(7, 0, 0, 0, 7, 0, 0, 0, 7, -0.53967786, 0, 0.8781853)
 layers = 2
 mesh = ExtResource("2_k0e2j")
 

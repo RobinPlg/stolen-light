@@ -8,47 +8,77 @@ extends RigidBody3D
 
 @export_category("Variables Orbite")
 @export var target_orbit : Node3D
-@export var speed_orbit :float = 40.0
-@export var distance :float = 5.0
-var current_angle_orbit :float = 0.0
+@export var orbit_speed :float = 2.0
+@export var desired_distance :float = 130.0
+@export var radial_strength := 0.02
+@export var radial_damping := 0.1
 
 @export_category("References")
-var ship: RigidBody3D
 @export var ship_hook_path: NodePath
 @export var planete_hook_path: NodePath
-
-
+var ship: RigidBody3D
 
 var ship_hook: Node3D
 var planete_hook: Node3D
 var planete_arrimee : bool
 var can_orbit : bool = true
 
-
 func _ready()-> void:
 	
 	planete_hook = get_node(planete_hook_path)
 	ship_hook = get_node(ship_hook_path)
+	
+	if can_orbit == true: 
+		
+		if target_orbit == null: 
+			return
+	global_position = target_orbit.global_position + Vector3(0, 0, desired_distance)
 
+	
 func _physics_process(delta: float)-> void:
 	
 	rotate_y(deg_to_rad(15.0) * delta)
-	orbit(delta)
 	_lock_to_ship()
+
+func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 	
-func orbit(delta: float) -> void:
-	
-	if can_orbit == true:
+	if can_orbit == false: 
+		return
 		
-		if target_orbit == null:
-			return
-		
-		current_angle_orbit += deg_to_rad(speed_orbit) * delta
+	if target_orbit == null: 
+		return
 	
-		var x : float= target_orbit.global_position.x + cos(current_angle_orbit) * distance
-		var z : float = target_orbit.global_position.z + sin(current_angle_orbit) * distance
-	
-		global_position = Vector3(x, target_orbit.global_position.y, z)
+	var center := target_orbit.global_position
+	var pos := state.transform.origin
+
+	# --- Correction verticale progressive ---
+	var vertical_error := center.y - pos.y
+	var vertical_force := Vector3(0, vertical_error * radial_strength, 0)
+	var vertical_damping_force := Vector3(0, -state.linear_velocity.y * radial_damping, 0)
+
+	# --- Orbite horizontale ---
+	var radial := pos - center
+	radial.y = 0  # on ignore Y pour l'horizontale
+	var distance := radial.length()
+	if distance == 0:
+		return
+	radial = radial.normalized()
+
+	var distance_error := distance - desired_distance
+	var radial_force := -radial * distance_error * radial_strength
+
+	var radial_velocity := state.linear_velocity.project(radial)
+	var damping_force := -radial_velocity * radial_damping
+
+	var tangent := Vector3(-radial.z, 0, radial.x).normalized()
+	var desired_tangent_velocity := tangent * orbit_speed
+
+	# On garde la composante radiale et horizontale de la vitesse tangentielle
+	var horizontal_velocity := desired_tangent_velocity + radial_velocity
+	state.linear_velocity = Vector3(horizontal_velocity.x, state.linear_velocity.y, horizontal_velocity.z)
+
+	# --- Appliquer toutes les forces ---
+	state.apply_central_force(radial_force + damping_force + vertical_force + vertical_damping_force)
 	
 func _lock_to_ship() -> void:
 	

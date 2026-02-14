@@ -48,7 +48,7 @@ func _process(delta: float) -> void:
 func check_planete() -> void: 
 	if grapin.planete_ready_to_grab != null and grapin.planete_ready_to_grab.planete_arrimee:
 		if grapin.planete_ready_to_grab.is_in_group("planete-grosse"):
-			base_offset = Vector3(0, 0, 15) 
+			base_offset = Vector3(0, 0, 25) 
 			return
 	
 	base_offset = Vector3(0, 0, 5) 

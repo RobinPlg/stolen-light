@@ -1,20 +1,20 @@
 [gd_scene format=3 uid="uid://bpin0d4s4jhdn"]
 
-[ext_resource type="PackedScene" uid="uid://o32a65ib7pax" path="res://Scènes/ship.tscn" id="1_m71di"]
-[ext_resource type="Texture2D" uid="uid://b5u5kc4ivh6hh" path="res://HDRI/HDR_rich_blue_nebulae_1.hdr" id="1_v54ux"]
-[ext_resource type="Script" uid="uid://dei53583sijim" path="res://Scripts/sun.gd" id="2_xvc65"]
-[ext_resource type="PackedScene" uid="uid://4y07leij14y1" path="res://Scènes/Planète.tscn" id="3_exmpl"]
-[ext_resource type="Script" uid="uid://chus5qrkg8fjk" path="res://Scripts/ui_ship.gd" id="4_2bek1"]
-[ext_resource type="Script" uid="uid://bctjie4un4pfj" path="res://Scripts/rotation_camera_3d.gd" id="5_g7igd"]
-[ext_resource type="Script" uid="uid://w7fc4w8a4o6w" path="res://Scripts/ui_reticle.gd" id="5_vkgmu"]
-[ext_resource type="PackedScene" uid="uid://dh8v06mfcnkc4" path="res://Scènes/PlanèteGrosse.tscn" id="6_e1qsd"]
-[ext_resource type="Script" uid="uid://ccpu4ir7ctvmb" path="res://Scripts/position_camera_3d.gd" id="6_of7rq"]
-[ext_resource type="Script" uid="uid://lo3j2tj8q4gm" path="res://Scripts/camera_3d.gd" id="7_btfq4"]
-[ext_resource type="Texture2D" uid="uid://co1avyowfxa55" path="res://Images/7536-200.png" id="10_ko8qx"]
-[ext_resource type="Texture2D" uid="uid://ced4omuaca6fm" path="res://Images/44748.png" id="10_tmkmv"]
+[ext_resource type="Texture2D" uid="uid://b5u5kc4ivh6hh" path="res://HDRI/HDR_rich_blue_nebulae_1.hdr" id="1_xi2rq"]
+[ext_resource type="Script" uid="uid://dei53583sijim" path="res://Scripts/sun.gd" id="2_hwdle"]
+[ext_resource type="PackedScene" uid="uid://o32a65ib7pax" path="res://Scènes/Ship.tscn" id="3_w5j8c"]
+[ext_resource type="Script" uid="uid://bctjie4un4pfj" path="res://Scripts/rotation_camera_3d.gd" id="4_ylqxo"]
+[ext_resource type="Script" uid="uid://ccpu4ir7ctvmb" path="res://Scripts/position_camera_3d.gd" id="5_a76ag"]
+[ext_resource type="Script" uid="uid://lo3j2tj8q4gm" path="res://Scripts/camera_3d.gd" id="6_tuwyl"]
+[ext_resource type="Script" uid="uid://chus5qrkg8fjk" path="res://Scripts/ui_ship.gd" id="7_6gpsq"]
+[ext_resource type="Script" uid="uid://w7fc4w8a4o6w" path="res://Scripts/ui_reticle.gd" id="8_5a4mg"]
+[ext_resource type="Texture2D" uid="uid://ced4omuaca6fm" path="res://Images/44748.png" id="9_11h7n"]
+[ext_resource type="Texture2D" uid="uid://co1avyowfxa55" path="res://Images/7536-200.png" id="10_g30mb"]
+[ext_resource type="PackedScene" uid="uid://dh8v06mfcnkc4" path="res://Scènes/PlanèteGrosse.tscn" id="11_m2p3x"]
+[ext_resource type="PackedScene" uid="uid://4y07leij14y1" path="res://Scènes/Planète.tscn" id="12_2i4e1"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_exmpl"]
-panorama = ExtResource("1_v54ux")
+panorama = ExtResource("1_xi2rq")
 
 [sub_resource type="Sky" id="Sky_2bek1"]
 sky_material = SubResource("PanoramaSkyMaterial_exmpl")
@@ -47,16 +47,10 @@ emission_energy_multiplier = 2.76
 radius = 1.0
 height = 2.0
 
-[sub_resource type="BoxMesh" id="BoxMesh_exmpl"]
-
-[sub_resource type="BoxMesh" id="BoxMesh_2bek1"]
-
-[sub_resource type="BoxMesh" id="BoxMesh_vkgmu"]
-
 [sub_resource type="LabelSettings" id="LabelSettings_exmpl"]
 font_size = 25
 
-[node name="SpaceTest" type="Node3D" unique_id=1828726740]
+[node name="World" type="Node3D" unique_id=1828726740]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1908490967]
 environment = SubResource("Environment_vkgmu")
@@ -64,7 +58,7 @@ camera_attributes = SubResource("CameraAttributesPractical_e1qsd")
 
 [node name="SystèmeSolaire" type="Area3D" parent="." unique_id=2131261305 groups=["orbite"]]
 transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 10, -7.734375, 0, -192.608)
-script = ExtResource("2_xvc65")
+script = ExtResource("2_hwdle")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="SystèmeSolaire" unique_id=541328204 groups=["orbite"]]
 shape = SubResource("CylinderShape3D_ko8qx")
@@ -79,49 +73,72 @@ mesh = SubResource("TorusMesh_ko8qx")
 material_override = SubResource("StandardMaterial3D_ko8qx")
 mesh = SubResource("SphereMesh_nf2ur")
 
-[node name="SystèmeSolaire2" type="Area3D" parent="." unique_id=995717270 groups=["orbite"]]
-transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 10, -590.196, 0, -192.608)
-script = ExtResource("2_xvc65")
+[node name="SystèmeSolaire2" type="Area3D" parent="." unique_id=601224771 groups=["orbite"]]
+transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 10, -517.3221, 0, -192.608)
+script = ExtResource("2_hwdle")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="SystèmeSolaire2" unique_id=1572430553 groups=["orbite"]]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SystèmeSolaire2" unique_id=1387635554 groups=["orbite"]]
 shape = SubResource("CylinderShape3D_ko8qx")
 
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="SystèmeSolaire2/CollisionShape3D" unique_id=183495771]
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="SystèmeSolaire2/CollisionShape3D" unique_id=1785496926]
 material_override = SubResource("StandardMaterial3D_xvc65")
 cast_shadow = 0
 lod_bias = 0.001
 mesh = SubResource("TorusMesh_ko8qx")
 
-[node name="Sun" type="MeshInstance3D" parent="SystèmeSolaire2" unique_id=226627923]
+[node name="Sun" type="MeshInstance3D" parent="SystèmeSolaire2" unique_id=1242076799]
 material_override = SubResource("StandardMaterial3D_ko8qx")
 mesh = SubResource("SphereMesh_nf2ur")
 
-[node name="Ship" parent="." unique_id=1624201241 instance=ExtResource("1_m71di")]
+[node name="SystèmeSolaire3" type="Area3D" parent="." unique_id=995717270 groups=["orbite"]]
+transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 10, -2755.7168, 1445.3544, -1969.9928)
+script = ExtResource("2_hwdle")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SystèmeSolaire3" unique_id=1572430553 groups=["orbite"]]
+shape = SubResource("CylinderShape3D_ko8qx")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="SystèmeSolaire3/CollisionShape3D" unique_id=183495771]
+material_override = SubResource("StandardMaterial3D_xvc65")
+cast_shadow = 0
+lod_bias = 0.001
+mesh = SubResource("TorusMesh_ko8qx")
+
+[node name="Sun" type="MeshInstance3D" parent="SystèmeSolaire3" unique_id=226627923]
+material_override = SubResource("StandardMaterial3D_ko8qx")
+mesh = SubResource("SphereMesh_nf2ur")
+
+[node name="Ship" parent="." unique_id=1624201241 instance=ExtResource("3_w5j8c")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.218796, -2.2184372, 0.62423706)
 
 [node name="NodeGrapinShip" type="Node3D" parent="Ship" unique_id=337101839]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.5606422)
 
 [node name="NodeCamera3D" type="Node3D" parent="Ship" unique_id=491686393]
-script = ExtResource("5_g7igd")
+script = ExtResource("4_ylqxo")
 
 [node name="PositionCamera3D" type="Node3D" parent="Ship/NodeCamera3D" unique_id=355992604]
-script = ExtResource("6_of7rq")
+script = ExtResource("5_a76ag")
 
 [node name="Camera3D" type="Camera3D" parent="Ship/NodeCamera3D/PositionCamera3D" unique_id=1904995818]
-script = ExtResource("7_btfq4")
+script = ExtResource("6_tuwyl")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=2095674727]
-transform = Transform3D(20, 0, 0, 0, 20, 0, 0, 0, 20, -718.4547, -326.46838, 701.47217)
-mesh = SubResource("BoxMesh_exmpl")
+[node name="PlaneteGrosse" parent="." unique_id=1141980245 node_paths=PackedStringArray("orbit_target") instance=ExtResource("11_m2p3x")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 409.09277, 0, -63.12735)
+axis_lock_linear_z = false
+orbit_target = NodePath("../SystèmeSolaire/Sun")
+ship_hook_path = NodePath("../Ship/NodeGrapinShip")
+planete_hook_path = NodePath("NodeGrapin2")
 
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="." unique_id=701132797]
-transform = Transform3D(70, 0, 0, 0, 70, 0, 0, 0, 70, -3718.0544, 160.0693, -317.0534)
-mesh = SubResource("BoxMesh_2bek1")
+[node name="NodeGrapin2" type="Node3D" parent="PlaneteGrosse" unique_id=944601967]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -11.039139)
 
-[node name="MeshInstance3D3" type="MeshInstance3D" parent="." unique_id=726978971]
-transform = Transform3D(40, 0, 0, 0, 40, 0, 0, 0, 40, 1673.0446, 2391.9475, -1101.1193)
-mesh = SubResource("BoxMesh_vkgmu")
+[node name="PlaneteRigidBody" parent="." unique_id=462652768 instance=ExtResource("12_2i4e1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.9700165, -2.3380966, 4.657425)
+ship_hook_path = NodePath("../Ship/NodeGrapinShip")
+planete_hook_path = NodePath("NodeGrapin2")
+
+[node name="NodeGrapin2" type="Node3D" parent="PlaneteRigidBody" unique_id=679247929]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.0617828)
 
 [node name="Control" type="Control" parent="." unique_id=1696648322]
 layout_mode = 3
@@ -131,7 +148,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
-script = ExtResource("4_2bek1")
+script = ExtResource("7_6gpsq")
 
 [node name="speedometer" type="Label" parent="Control" unique_id=1320189058]
 layout_mode = 1
@@ -163,7 +180,7 @@ offset_right = 20.0
 offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("5_vkgmu")
+script = ExtResource("8_5a4mg")
 
 [node name="PlaneteLogo" type="TextureRect" parent="Control" unique_id=1631297661]
 layout_mode = 1
@@ -175,7 +192,7 @@ offset_top = -68.0
 offset_right = 75.0
 offset_bottom = -42.99994
 grow_vertical = 0
-texture = ExtResource("10_tmkmv")
+texture = ExtResource("9_11h7n")
 expand_mode = 1
 
 [node name="OrbitLogo" type="TextureRect" parent="Control" unique_id=1923790081]
@@ -188,28 +205,12 @@ offset_top = -71.0
 offset_right = 130.0
 offset_bottom = -41.0
 grow_vertical = 0
-texture = ExtResource("10_ko8qx")
+texture = ExtResource("10_g30mb")
 expand_mode = 1
-
-[node name="PlaneteGrosse" parent="." unique_id=1141980245 node_paths=PackedStringArray("target_orbit") instance=ExtResource("6_e1qsd")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 409.09277, 0, -63.12735)
-axis_lock_linear_z = false
-target_orbit = NodePath("../SystèmeSolaire/Sun")
-ship_hook_path = NodePath("../Ship/NodeGrapinShip")
-planete_hook_path = NodePath("NodeGrapin2")
-
-[node name="NodeGrapin2" type="Node3D" parent="PlaneteGrosse" unique_id=944601967]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -9.55172)
-
-[node name="PlaneteRigidBody" parent="." unique_id=462652768 instance=ExtResource("3_exmpl")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.9700165, -2.3380966, 4.657425)
-ship_hook_path = NodePath("../Ship/NodeGrapinShip")
-planete_hook_path = NodePath("NodeGrapin2")
-
-[node name="NodeGrapin2" type="Node3D" parent="PlaneteRigidBody" unique_id=679247929]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.0617828)
 
 [connection signal="body_entered" from="SystèmeSolaire" to="SystèmeSolaire" method="_on_body_entered"]
 [connection signal="body_exited" from="SystèmeSolaire" to="SystèmeSolaire" method="_on_body_exited"]
 [connection signal="body_entered" from="SystèmeSolaire2" to="SystèmeSolaire2" method="_on_body_entered"]
 [connection signal="body_exited" from="SystèmeSolaire2" to="SystèmeSolaire2" method="_on_body_exited"]
+[connection signal="body_entered" from="SystèmeSolaire3" to="SystèmeSolaire3" method="_on_body_entered"]
+[connection signal="body_exited" from="SystèmeSolaire3" to="SystèmeSolaire3" method="_on_body_exited"]

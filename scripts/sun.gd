@@ -14,7 +14,7 @@ func _physics_process(delta: float) -> void:
 	
 	if is_instance_valid(planete):
 		if planete.planete_arrimee == false: 
-			planete.target_orbit = self
+			planete.orbit_target = self
 
 func _on_body_entered(body: Node3D) -> void:
 	if body.is_in_group("planete"):
@@ -25,5 +25,5 @@ func _on_body_exited(body: Node3D) -> void:
 	if body.is_in_group("planete"):
 			body.can_orbit = false
 			if body.planete_arrimee == true:
-				body.target_orbit = null
+				body.orbit_target = null
 				planete = null

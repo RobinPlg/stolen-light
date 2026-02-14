@@ -14,13 +14,14 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
-	var rotation : Vector3 = camera_rotation.get_camera_rotation()
+	var cam_rotation : Vector3 = camera_rotation.get_camera_rotation()
 	var cam_transform: Transform3D = Transform3D.IDENTITY
 	var throttle_up_strength := Input.get_action_strength("throttle_up_manette")
 	var throttle_down_strength := Input.get_action_strength("throttle_down_manette")
 	
 	check_planete()
 	
+	## Adaptation de la caméra en foction des actions
 	if Input.is_action_pressed("throttle_up"):
 		offset = lerp(offset, base_offset + Vector3(0, 0, 1), delta)
 		camera.fov = lerp(camera.fov, 100.0, 2.0 * delta)
@@ -40,17 +41,23 @@ func _process(delta: float) -> void:
 	return_to_base_offset(delta)
 	
 	cam_transform = cam_transform.translated(offset)
-	cam_transform = cam_transform.rotated(Vector3.RIGHT, deg_to_rad(rotation.x))
-	cam_transform = cam_transform.rotated(Vector3.UP, deg_to_rad(rotation.y))
+	cam_transform = cam_transform.rotated(Vector3.RIGHT, deg_to_rad(cam_rotation.x))
+	cam_transform = cam_transform.rotated(Vector3.UP, deg_to_rad(cam_rotation.y))
 	var target_position: Transform3D = ship.global_transform * cam_transform
 	global_transform = target_position
 
 func check_planete() -> void: 
+	
+	## Adaptation de la distance de la caméra en foction de la planète
 	if grapin.planete_ready_to_grab != null and grapin.planete_ready_to_grab.planete_arrimee:
 		if grapin.planete_ready_to_grab.is_in_group("planete-grosse"):
 			base_offset = Vector3(0, 0, 25) 
 			return
+		if grapin.planete_ready_to_grab.is_in_group("planete-petite"):
+			base_offset = Vector3(0, 0, 8) 
+			return
 	
+	## Retour distance de la caméra de base quyand rien n'est accroché
 	base_offset = Vector3(0, 0, 5) 
 			
 func return_to_base_offset(delta: float) -> void:

@@ -105,7 +105,7 @@ func get_input(delta: float) -> void:
 			planete_arrimee = grapin.planete_ready_to_grab
 			planete_arrimee.can_orbit = false
 			planete_arrimee.ship = self
-			planete_arrimee.target_orbit = null
+			planete_arrimee.orbit_target = null
 
 func _physics_process(delta: float)->void:
 	

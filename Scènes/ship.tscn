@@ -9,6 +9,7 @@ size = Vector3(1, 1, 2)
 [sub_resource type="BoxMesh" id="BoxMesh_v4325"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_78o8j"]
+size = Vector3(1, 1, 3)
 
 [node name="Ship" type="RigidBody3D" unique_id=1624201241]
 mass = 1.5
@@ -31,12 +32,14 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 2, 0, 0, 0)
 mesh = SubResource("BoxMesh_v4325")
 
 [node name="Grapin" type="Node3D" parent="." unique_id=880503096]
-transform = Transform3D(2.5, 0, 0, 0, 1.7, 0, 0, 0, 3, 0, 0, 2.514169)
+transform = Transform3D(2.5, 0, 0, 0, 1.7, 0, 0, 0, 3, 0, 0, 0)
 
 [node name="GrapinZone" type="Area3D" parent="Grapin" unique_id=856939176]
+transform = Transform3D(1, 0, 0, 0, 0.99999994, 0, 0, 0, 0.99999994, 0, 0, 1.8184255)
 script = ExtResource("6_xpsff")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Grapin/GrapinZone" unique_id=2007083288]
+transform = Transform3D(1, 0, 0, 0, 0.9999998, 0, 0, 0, 0.99999976, 0, 0, 0)
 shape = SubResource("BoxShape3D_78o8j")
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]

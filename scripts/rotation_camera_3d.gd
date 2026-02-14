@@ -10,7 +10,7 @@ var current_rotation: Vector3 = Vector3()
 func _ready() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
-func _physics_process(delta: float) -> void:
+func _process(delta: float) -> void:
 	var look_input := Input.get_vector("view_right", "view_left", "view_down", "view_up")
 	look_input = turn_rate * look_input * delta
 	current_rotation.y += look_input.x

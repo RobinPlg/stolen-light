@@ -3,7 +3,12 @@ extends RigidBody3D
 @export_category("Variables Grapin")
 @export var follow_strength := 0.3
 @export var follow_latency := 0.18
-@export var angular_damping := 0.1   
+@export var angular_damping := 0.1
+@export var control_smooth := 6.0
+@export var max_control_offset := 10.0
+
+var control_offset := Vector3.ZERO 
+var mouse_delta := Vector2.ZERO
 
 @export_category("Variables Orbite")
 @export var orbit_target : Node3D
@@ -32,12 +37,17 @@ func _ready()-> void:
 		if orbit_target == null: 
 			return
 	global_position = orbit_target.global_position + Vector3(0, 0, orbit_distance)
-
+	
+func _input(event: InputEvent) -> void:
+	if event is InputEventMouseMotion:
+		mouse_delta += event.relative
+		mouse_delta.y = -mouse_delta.y * 2
 	
 func _physics_process(delta: float)-> void:
 	
 	rotate_y(deg_to_rad(15.0) * delta)
 	_lock_to_ship()
+	_handle_planet_control(delta)
 
 func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 	
@@ -49,15 +59,13 @@ func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 	
 	var center := orbit_target.global_position
 	var pos := state.transform.origin
-
-	# --- Correction verticale progressive ---
+	
 	var vertical_error := center.y - pos.y
 	var vertical_force := Vector3(0, vertical_error * orbit_strength, 0)
 	var vertical_damping_force := Vector3(0, -state.linear_velocity.y * orbit_damping, 0)
 
-	# --- Orbite horizontale ---
 	var radial := pos - center
-	radial.y = 0  # on ignore Y pour l'horizontale
+	radial.y = 0 
 	var distance := radial.length()
 	if distance == 0:
 		return
@@ -72,11 +80,10 @@ func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 	var tangent := Vector3(-radial.z, 0, radial.x).normalized()
 	var desired_tangent_velocity := tangent * orbit_speed
 
-	# On garde la composante radiale et horizontale de la vitesse tangentielle
 	var horizontal_velocity := desired_tangent_velocity + radial_velocity
 	state.linear_velocity = Vector3(horizontal_velocity.x, state.linear_velocity.y, horizontal_velocity.z)
 
-	# --- Appliquer toutes les forces ---
+
 	state.apply_central_force(radial_force + damping_force + vertical_force + vertical_damping_force)
 	
 func _lock_to_ship() -> void:
@@ -87,11 +94,10 @@ func _lock_to_ship() -> void:
 	
 	planete_arrimee = true
 
-	var desired_global: Transform3D = ship_hook.global_transform
+	var desired_global: Transform3D = ship_hook.global_transform.translated(control_offset)
 	var locked_transform: Transform3D = desired_global * planete_hook.transform.affine_inverse()
 
 	global_position = global_position.lerp(locked_transform.origin, follow_strength)
-
 
 	var current_basis := global_transform.basis
 	var target_basis := locked_transform.basis
@@ -101,3 +107,36 @@ func _lock_to_ship() -> void:
 	linear_velocity = linear_velocity.lerp(ship.linear_velocity, follow_latency)
 
 	angular_velocity *= angular_damping
+	
+func _handle_planet_control(delta: float) -> void:
+
+	if planete_arrimee:
+		var input_vec := Vector2.ZERO
+		
+		input_vec.x = Input.get_action_strength("view_right") - Input.get_action_strength("view_left") 
+		input_vec.y = Input.get_action_strength("view_up") - Input.get_action_strength("view_down")
+
+		if Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
+			input_vec += mouse_delta * 0.002
+
+		input_vec = input_vec.limit_length(1.0)
+		mouse_delta = Vector2.ZERO
+		
+		var velocity := ship.linear_velocity
+
+		if velocity.length() < 0.1:
+			velocity = -ship.global_transform.basis.z
+
+		var right := ship.global_transform.basis.x.normalized() 
+		var up := ship.global_transform.basis.y.normalized() 
+
+		var target_offset :=right * input_vec.x + up * input_vec.y
+
+		target_offset *= max_control_offset
+
+		control_offset = control_offset.lerp(
+			target_offset,
+			control_smooth * delta
+		)
+	else: 
+		control_offset = Vector3.ZERO

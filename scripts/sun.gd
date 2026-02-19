@@ -23,7 +23,7 @@ func _on_body_entered(body: Node3D) -> void:
 
 func _on_body_exited(body: Node3D) -> void:
 	if body.is_in_group("planete"):
-			body.can_orbit = false
 			if body.planete_arrimee == true:
+				body.can_orbit = false
 				body.orbit_target = null
 				planete = null

@@ -87,19 +87,18 @@ func get_input(delta: float) -> void:
 		if forward_speed < 130.0 and forward_speed > -50.0 :
 			camera.shake()
 		
-		
 	pitch_input = lerp(pitch_input, Input.get_action_strength("pitch_up") - Input.get_action_strength("pitch_down"), input_response * delta)
 	roll_input = lerp(roll_input, Input.get_action_strength("roll_left") - Input.get_action_strength("roll_right"), input_response * delta)
 	yaw_input = lerp(yaw_input, Input.get_action_strength("yaw_left") - Input.get_action_strength("yaw_right"), input_response * delta)
 
 	if Input.is_action_just_pressed("grab_planete") :
-		
+	
 		## Arrimage Planète
 		if planete_arrimee:
 			planete_arrimee.ship = null
 			planete_arrimee.can_orbit = true
 			planete_arrimee = null
-			
+
 		## Désarrimage Planète
 		elif grapin.is_planete_here : 
 			planete_arrimee = grapin.planete_ready_to_grab
@@ -111,15 +110,9 @@ func _physics_process(delta: float)->void:
 	
 	get_input(delta)
 	
-	
 	if Input.is_action_just_pressed("light_mode"):
 		light_mode_state = !light_mode_state
-		
-	##if light_mode_state:
-		##light_mode_on(delta)
-	##else:
-		##light_mode_off(delta)
-	
+
 	var torque := Vector3.ZERO
 	if abs(roll_input) < 0.01 and abs(pitch_input) < 0.01 and abs(yaw_input) < 0.01:
 		angular_damp = 6.0
@@ -130,24 +123,12 @@ func _physics_process(delta: float)->void:
 	torque += transform.basis.y * yaw_input * yaw_speed
 	apply_torque(torque)
 	apply_central_force(-transform.basis.z * forward_speed)
-	
-	
-##func light_mode_on(delta: float) ->void:
-	##light.position.y = lerpf(light.position.y, 0.665, 3.0 * delta) 
-	##springarm.position.y = lerpf(springarm.position.y, 2.5, 3.0 * delta) 
-
-##func light_mode_off(delta : float) ->void:
-	##light.position.y = lerpf(light.position.y, 0.0 , 3.0 * delta) 
-	##3springarm.position.y = lerpf(springarm.position.y, 0.0 , 3.0 * delta) 
-	
-
 
 func _on_body_entered(body: Node) -> void:
 	if body is RigidBody3D:
-		# Calcul de la normale entre la planète et le vaisseau
+		
 		var collision_normal:Vector3 = (global_position - body.global_position).normalized()
 		
-		# Rebond avec perte d'énergie (0.7 = 70% conservé)
-		linear_velocity = linear_velocity.bounce(collision_normal) * 0.7
+		linear_velocity = linear_velocity.bounce(collision_normal)
 		
 		forward_speed *= -0.1

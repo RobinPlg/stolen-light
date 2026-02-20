@@ -1,6 +1,6 @@
 extends RigidBody3D
 
-@export_category("Variables")
+@export_category("Variables Vaisseau")
 @export var max_speed: float = 200.0
 @export var min_speed: float = -100.0
 @export var acceleration: float = 0.1
@@ -10,11 +10,17 @@ extends RigidBody3D
 @export var yaw_speed : float= 1.0
 @export var input_response : float= 5.0
 
+@export_category("Variables Dérive Planète")
+@export var grapin_move_radius: float = 10.0
+@export var grapin_move_speed: float = 0.05
+@export var direction_duration_min: float = 3.0
+@export var direction_duration_max: float = 6.0
+@export var torque_feedback_strengh : float = 0.15
+
+@onready var node_grapin_ship: Node3D = $NodeGrapinShip
 @onready var camera: Camera3D = $NodeCamera3D/PositionCamera3D/Camera3D
 @onready var grapin : Node3D = $Grapin/GrapinZone
 var planète : RigidBody3D
-##@onready var raycast: RayCast3D = $Lampe/RayCast3D
-##@onready var light : Node3D = $Lampe
 
 var speed : Vector3= Vector3.ZERO
 var forward_speed : float= 0.0
@@ -22,8 +28,13 @@ var pitch_input : float= 0.0
 var roll_input : float= 0.0
 var yaw_input : float= 0.0
 var high_speed : bool= false
-var light_mode_state: bool 
 var planete_arrimee: RigidBody3D = null
+
+var current_dir: Vector3 = Vector3.ZERO
+var dir_timer: float = 0.0
+var current_duration: float = 0.0
+var grapin_offset: Vector3 = Vector3.ZERO
+var target_dir: Vector3 = Vector3.ZERO
 
 func get_input(delta: float) -> void:
 
@@ -60,7 +71,6 @@ func get_input(delta: float) -> void:
 		forward_speed += throttle * accel * delta
 		high_speed = false
 
-	# Limite vitesse
 	forward_speed = clamp(
 		forward_speed,
 		min_speed,
@@ -77,7 +87,10 @@ func get_input(delta: float) -> void:
 
 	if high_speed:
 		forward_speed += (250.0 - forward_speed) * 0.03
-		if forward_speed <= 250.0:
+		camera.fov = lerp(camera.fov, 80.0, 2.0 * delta)
+		camera.shake()
+		if forward_speed <= 250.9:
+			camera.fov = lerp(camera.fov, 90.0, 2.0 * delta)
 			high_speed = false
 
 	# CAMERA SHAKE
@@ -110,8 +123,15 @@ func _physics_process(delta: float)->void:
 	
 	get_input(delta)
 	
-	if Input.is_action_just_pressed("light_mode"):
-		light_mode_state = !light_mode_state
+	if planete_arrimee:
+		update_grapin_random_motion(delta)
+		var torque_feedback := Vector3.ZERO
+		torque_feedback += transform.basis.y * (-planete_arrimee.control_offset.x * torque_feedback_strengh)
+		torque_feedback += transform.basis.x * (-planete_arrimee.control_offset.y * torque_feedback_strengh)
+		apply_torque(torque_feedback)
+	else:
+		grapin_offset = grapin_offset.lerp(Vector3.ZERO, 5.0 * delta)
+		node_grapin_ship.position = grapin_offset
 
 	var torque := Vector3.ZERO
 	if abs(roll_input) < 0.01 and abs(pitch_input) < 0.01 and abs(yaw_input) < 0.01:
@@ -123,6 +143,30 @@ func _physics_process(delta: float)->void:
 	torque += transform.basis.y * yaw_input * yaw_speed
 	apply_torque(torque)
 	apply_central_force(-transform.basis.z * forward_speed)
+	
+func update_grapin_random_motion(delta: float) -> void:
+
+	dir_timer -= delta
+
+	if dir_timer <= 0.0:
+		pick_new_random_direction()
+
+	current_dir = current_dir.slerp(target_dir, 3.0 * delta)
+	var target_offset : Vector3 = current_dir * grapin_move_radius
+	grapin_offset = grapin_offset.lerp(target_offset, grapin_move_speed * delta)
+
+	node_grapin_ship.position = grapin_offset
+	
+func pick_new_random_direction() -> void:
+
+	dir_timer = randf_range(direction_duration_min, direction_duration_max)
+
+	var random_2d := Vector2(
+		randf_range(-1.0, 1.0),
+		randf_range(-1.0, 1.0)
+	).normalized()
+
+	target_dir = Vector3(random_2d.x, random_2d.y, 0.0).normalized()
 
 func _on_body_entered(body: Node) -> void:
 	if body is RigidBody3D:

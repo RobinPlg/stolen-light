@@ -13,6 +13,7 @@ func _ready() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 func _process(delta: float) -> void:
+	
 	if ship.planete_arrimee: 
 		current_rotation.y = 0
 		current_rotation.x = 0
@@ -33,7 +34,6 @@ func _input(event: InputEvent) -> void:
 		current_rotation.y -= event.relative.x * mouse_sensitivity
 		current_rotation.x -= event.relative.y * mouse_sensitivity
 		current_rotation.x = clampf(current_rotation.x, -90, 90)
-		
 		
 	elif event is InputEventKey and event.keycode == KEY_ESCAPE and event.pressed:
 		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE

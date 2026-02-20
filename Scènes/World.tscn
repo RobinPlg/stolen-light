@@ -110,7 +110,9 @@ mesh = SubResource("SphereMesh_nf2ur")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.218796, -2.2184372, 0.62423706)
 
 [node name="NodeGrapinShip" type="Node3D" parent="Ship" unique_id=337101839]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.5606422)
+
+[node name="GrapinPosition" type="Node3D" parent="Ship/NodeGrapinShip" unique_id=286024543]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.561)
 
 [node name="NodeCamera3D" type="Node3D" parent="Ship" unique_id=491686393]
 script = ExtResource("4_ylqxo")
@@ -124,8 +126,9 @@ script = ExtResource("6_tuwyl")
 [node name="PlaneteGrosse" parent="." unique_id=1141980245 node_paths=PackedStringArray("orbit_target") instance=ExtResource("11_m2p3x")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 409.09277, 0, -63.12735)
 axis_lock_linear_z = false
+max_control_offset = 3.0
 orbit_target = NodePath("../SystèmeSolaire/Sun")
-ship_hook_path = NodePath("../Ship/NodeGrapinShip")
+ship_hook_path = NodePath("../Ship/NodeGrapinShip/GrapinPosition")
 planete_hook_path = NodePath("NodeGrapin2")
 
 [node name="NodeGrapin2" type="Node3D" parent="PlaneteGrosse" unique_id=944601967]
@@ -133,8 +136,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.652153)
 
 [node name="PlaneteRigidBody" parent="." unique_id=462652768 instance=ExtResource("12_2i4e1")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.9700165, -2.3380966, 4.657425)
-control_smooth = 0.1
-ship_hook_path = NodePath("../Ship/NodeGrapinShip")
+max_control_offset = 3.0
+ship_hook_path = NodePath("../Ship/NodeGrapinShip/GrapinPosition")
 planete_hook_path = NodePath("NodeGrapin2")
 
 [node name="NodeGrapin2" type="Node3D" parent="PlaneteRigidBody" unique_id=679247929]

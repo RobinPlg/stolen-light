@@ -4,7 +4,7 @@ extends RigidBody3D
 @export var follow_strength := 0.3
 @export var follow_latency := 0.18
 @export var angular_damping := 0.1
-@export var control_smooth := 6.0
+@export var control_smooth := 0.1
 @export var max_control_offset := 10.0
 
 var control_offset := Vector3.ZERO 
@@ -40,8 +40,11 @@ func _ready()-> void:
 	
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion:
-		mouse_delta += event.relative
+		control_smooth = 0.4
+		mouse_delta += event.relative 
 		mouse_delta.y = -mouse_delta.y * 2
+	else: 
+		control_smooth = 0.1
 	
 func _physics_process(delta: float)-> void:
 	
@@ -94,8 +97,8 @@ func _lock_to_ship() -> void:
 	
 	planete_arrimee = true
 
-	var desired_global: Transform3D = ship_hook.global_transform.translated(control_offset)
-	var locked_transform: Transform3D = desired_global * planete_hook.transform.affine_inverse()
+	var desired_transform := Transform3D(ship_hook.global_transform.basis,ship_hook.to_global(control_offset))
+	var locked_transform: Transform3D = desired_transform * planete_hook.transform.affine_inverse()
 
 	global_position = global_position.lerp(locked_transform.origin, follow_strength)
 
@@ -127,10 +130,10 @@ func _handle_planet_control(delta: float) -> void:
 		if velocity.length() < 0.1:
 			velocity = -ship.global_transform.basis.z
 
-		var right := ship.global_transform.basis.x.normalized() 
-		var up := ship.global_transform.basis.y.normalized() 
+		var local_right := Vector3.RIGHT
+		var local_up := Vector3.UP
 
-		var target_offset :=right * input_vec.x + up * input_vec.y
+		var target_offset := (local_right * input_vec.x + local_up * input_vec.y) * max_control_offset
 
 		target_offset *= max_control_offset
 
@@ -138,5 +141,6 @@ func _handle_planet_control(delta: float) -> void:
 			target_offset,
 			control_smooth * delta
 		)
+		
 	else: 
 		control_offset = Vector3.ZERO

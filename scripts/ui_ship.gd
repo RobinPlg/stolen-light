@@ -22,7 +22,7 @@ func _physics_process(_delta: float) -> void:
 		planete_logo.visible = false
 	
 	if is_instance_valid(ship.planete_arrimee):
-		if ship.planete_arrimee.can_orbit == true:
+		if ship.planete_arrimee.can_orbit == true and ship.forward_speed <= 5.0:
 			orbit_logo.visible = true
 		else:
 			orbit_logo.visible = false

@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://dh8v06mfcnkc4"]
 
 [ext_resource type="Script" uid="uid://c1m834k6y8met" path="res://Scripts/planete.gd" id="1_t5m4e"]
-[ext_resource type="ArrayMesh" uid="uid://co7ddj4l8iug7" path="res://Planet VOLCAN V1.obj" id="2_k0e2j"]
+[ext_resource type="ArrayMesh" uid="uid://co7ddj4l8iug7" path="res://Mesh/Planet VOLCAN V1.obj" id="2_k0e2j"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_k0e2j"]
 radius = 7.167

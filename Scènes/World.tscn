@@ -11,6 +11,8 @@
 [ext_resource type="Texture2D" uid="uid://co1avyowfxa55" path="res://Images/7536-200.png" id="10_g30mb"]
 [ext_resource type="PackedScene" uid="uid://dh8v06mfcnkc4" path="res://Scènes/PlanèteGrosse.tscn" id="11_m2p3x"]
 [ext_resource type="PackedScene" uid="uid://4y07leij14y1" path="res://Scènes/Planète.tscn" id="12_2i4e1"]
+[ext_resource type="PackedScene" uid="uid://coi1p4v85fbfg" path="res://Scènes/dialogue_ui.tscn" id="12_hwdle"]
+[ext_resource type="PackedScene" uid="uid://bv4aevsqhtr1i" path="res://Scènes/dialogue_trigger.tscn" id="12_xi2rq"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_exmpl"]
 panorama = ExtResource("1_xi2rq")
@@ -46,8 +48,14 @@ emission_energy_multiplier = 2.76
 radius = 1.0
 height = 2.0
 
+[sub_resource type="SphereMesh" id="SphereMesh_tp27u"]
+radius = 0.1
+height = 0.2
+
 [sub_resource type="LabelSettings" id="LabelSettings_exmpl"]
 font_size = 25
+
+[sub_resource type="SphereMesh" id="SphereMesh_xi2rq"]
 
 [node name="World" type="Node3D" unique_id=1828726740]
 
@@ -114,8 +122,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.218796, -2.2184372, 0.6242
 [node name="GrapinPosition" type="Node3D" parent="Ship/NodeGrapinShip" unique_id=286024543]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.561)
 
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ship/NodeGrapinShip/GrapinPosition" unique_id=370415792]
+mesh = SubResource("SphereMesh_tp27u")
+
 [node name="NodeCamera3D" type="Node3D" parent="Ship" unique_id=491686393]
 script = ExtResource("4_ylqxo")
+turn_rate = 75.0
+mouse_sensitivity = 0.02
 
 [node name="PositionCamera3D" type="Node3D" parent="Ship/NodeCamera3D" unique_id=355992604]
 script = ExtResource("5_a76ag")
@@ -142,6 +155,9 @@ planete_hook_path = NodePath("NodeGrapin2")
 
 [node name="NodeGrapin2" type="Node3D" parent="PlaneteRigidBody" unique_id=679247929]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.0617828)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="PlaneteRigidBody/NodeGrapin2" unique_id=1931748646]
+mesh = SubResource("SphereMesh_tp27u")
 
 [node name="Control" type="Control" parent="." unique_id=1696648322]
 layout_mode = 3
@@ -194,6 +210,15 @@ offset_bottom = -41.0
 grow_vertical = 0
 texture = ExtResource("10_g30mb")
 expand_mode = 1
+
+[node name="dialogue_ui" parent="." unique_id=399221483 instance=ExtResource("12_hwdle")]
+
+[node name="dialogue_trigger" parent="." unique_id=825190027 instance=ExtResource("12_xi2rq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.0093117, -2.2184372, -13.714096)
+dialogues = Array[String](["Finally, here he is. Almost arrived late on your first day.", " Let's make this quick, I marked the location of your first planets on your onboard computer.", "I'll contact you when you arrive."])
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="dialogue_trigger" unique_id=871203542]
+mesh = SubResource("SphereMesh_xi2rq")
 
 [connection signal="body_entered" from="SystèmeSolaire" to="SystèmeSolaire" method="_on_body_entered"]
 [connection signal="body_exited" from="SystèmeSolaire" to="SystèmeSolaire" method="_on_body_exited"]

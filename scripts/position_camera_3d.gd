@@ -23,12 +23,12 @@ func _process(delta: float) -> void:
 	var throttle_down_strength := Input.get_action_strength("throttle_down_manette")
 	
 	check_planete()
-	
+
 	var ang_local : Vector3= ship.global_transform.basis.inverse() * ship.angular_velocity
 
 	var target_movement_offset : Vector3 = Vector3(
-	-ang_local.y * 2.5, 
-	 ang_local.x , 
+	-ang_local.y , 
+	 ang_local.x * 0.5 , 
 	0
 	) * movement_offset_strength * ship.forward_speed * 0.02
 
@@ -39,10 +39,10 @@ func _process(delta: float) -> void:
 
 	## Adaptation de la caméra en foction des actions
 	if Input.is_action_pressed("throttle_up"):
-		offset = lerp(offset, base_offset + Vector3(0, 0, 1), delta)
+		offset = lerp(offset, base_offset + Vector3(0, 0, 15), 0.2 * delta)
 		camera.fov = lerp(camera.fov, 100.0, 2.0 * delta)
 	if Input.is_action_pressed("throttle_up_manette") and throttle_up_strength > 0.5:
-		offset = lerp(offset, base_offset + Vector3(0, 0, 1), delta)
+		offset = lerp(offset, base_offset + Vector3(0, 0, 15), 0.2 * delta)
 		camera.fov = lerp(camera.fov, 100.0, 2.0 * delta)
 	if Input.is_action_pressed("throttle_down_manette") and throttle_down_strength > 0.5:
 		offset = lerp(offset, base_offset - Vector3(0, 0, 1), delta) 

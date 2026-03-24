@@ -15,6 +15,8 @@ extends RigidBody3D
 @export var grapin_move_speed: float = 0.05
 @export var direction_duration_min: float = 3.0
 @export var direction_duration_max: float = 6.0
+@export var derive_duration_min: float = 5.0
+@export var derive_duration_max: float = 10.0
 @export var torque_feedback_strengh : float = 0.15
 
 @onready var node_grapin_ship: Node3D = $NodeGrapinShip
@@ -31,10 +33,12 @@ var high_speed : bool= false
 var planete_arrimee: RigidBody3D = null
 
 var current_dir: Vector3 = Vector3.ZERO
-var dir_timer: float = 0.0
+@onready var dir_timer: float = 0.0
+@onready var timer_derive: float = randf_range(derive_duration_min, derive_duration_max)
 var current_duration: float = 0.0
 var grapin_offset: Vector3 = Vector3.ZERO
 var target_dir: Vector3 = Vector3.ZERO
+var is_deriving: bool = false
 
 func get_input(delta: float) -> void:
 
@@ -146,20 +150,36 @@ func _physics_process(delta: float)->void:
 	
 func update_grapin_random_motion(delta: float) -> void:
 
-	dir_timer -= delta
-
-	if dir_timer <= 0.0:
-		pick_new_random_direction()
-
-	current_dir = current_dir.slerp(target_dir, 3.0 * delta)
-	var target_offset : Vector3 = current_dir * grapin_move_radius
-	grapin_offset = grapin_offset.lerp(target_offset, grapin_move_speed * delta)
+	if is_deriving:
+		dir_timer -= delta
+		camera.random_strength = 0.005
+		camera.shake()
+		print("dir timer ",dir_timer)
+		if dir_timer <= 0.0:
+			is_deriving = false
+			timer_derive = randf_range(derive_duration_min, derive_duration_max)
+			return
+			
+		current_dir = current_dir.slerp(target_dir, 3.0 * delta)
+		var target_offset := current_dir * grapin_move_radius
+		
+		grapin_offset = grapin_offset.lerp(target_offset, grapin_move_speed * delta)
+		
+	else:
+		timer_derive -= delta
+		print("timer derive ", timer_derive)
+		grapin_offset = grapin_offset.lerp(Vector3.ZERO, delta)
+		if timer_derive <= 0.0:
+			start_new_derive()
 
 	node_grapin_ship.position = grapin_offset
 	
-func pick_new_random_direction() -> void:
-
+func start_new_derive() -> void:
+	is_deriving = true
 	dir_timer = randf_range(direction_duration_min, direction_duration_max)
+	pick_new_random_direction()
+	
+func pick_new_random_direction() -> void:
 
 	var random_2d := Vector2(
 		randf_range(-1.0, 1.0),

@@ -41,9 +41,11 @@ func _ready()-> void:
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion:
 		control_smooth = 0.4
-		mouse_delta += event.relative 
-		mouse_delta.y = -mouse_delta.y * 2
-	else: 
+		
+		mouse_delta = event.relative
+		mouse_delta.y *= -2.0
+		
+	else:
 		control_smooth = 0.1
 	
 func _physics_process(delta: float)-> void:
@@ -91,12 +93,14 @@ func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 	
 func _lock_to_ship() -> void:
 	
+		
 	if ship == null: 
 		planete_arrimee = false
 		return
 	
 	planete_arrimee = true
 
+		
 	var desired_transform := Transform3D(ship_hook.global_transform.basis,ship_hook.to_global(control_offset))
 	var locked_transform: Transform3D = desired_transform * planete_hook.transform.affine_inverse()
 
@@ -110,7 +114,7 @@ func _lock_to_ship() -> void:
 	linear_velocity = linear_velocity.lerp(ship.linear_velocity, follow_latency)
 
 	angular_velocity *= angular_damping
-	
+
 func _handle_planet_control(delta: float) -> void:
 
 	if planete_arrimee:
@@ -123,6 +127,7 @@ func _handle_planet_control(delta: float) -> void:
 			input_vec += mouse_delta * 0.002
 
 		input_vec = input_vec.limit_length(1.0)
+		
 		mouse_delta = Vector2.ZERO
 		
 		var velocity := ship.linear_velocity
@@ -134,13 +139,18 @@ func _handle_planet_control(delta: float) -> void:
 		var local_up := Vector3.UP
 
 		var target_offset := (local_right * input_vec.x + local_up * input_vec.y) * max_control_offset
-
 		target_offset *= max_control_offset
 
 		control_offset = control_offset.lerp(
 			target_offset,
 			control_smooth * delta
 		)
+			
+		if not target_offset.is_finite():
+			print("TARGET OFFSET INVALID")
+
+		if not control_offset.is_finite():
+			print("CONTROL OFFSET INVALID")
 		
 	else: 
 		control_offset = Vector3.ZERO

@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://o32a65ib7pax"]
 
 [ext_resource type="Script" uid="uid://yqo47pwygwpe" path="res://Scripts/ship.gd" id="1_l3rv8"]
-[ext_resource type="ArrayMesh" uid="uid://dn3hypiijw6xa" path="res://Vaisseau.obj" id="2_4n07m"]
+[ext_resource type="ArrayMesh" uid="uid://dn3hypiijw6xa" path="res://Mesh/Vaisseau.obj" id="2_4n07m"]
 [ext_resource type="Script" uid="uid://dsmg2hfj6w2c5" path="res://Scripts/grapin_zone.gd" id="6_xpsff"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_4n07m"]

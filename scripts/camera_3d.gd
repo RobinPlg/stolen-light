@@ -9,14 +9,14 @@ var initial_transform: Transform3D
 func shake()-> void:
 	initial_transform = self.transform
 	shake_strength = random_strength
-	
+
 func random_offset()-> Vector3:
 	return Vector3(
 		randf_range(-shake_strength, shake_strength),
 		randf_range(-shake_strength, shake_strength),
 		0.0
 	)
-	
+
 func _physics_process(delta: float) -> void:
 	if shake_strength > 0:
 		shake_strength = lerpf(shake_strength, 0.0 , shake_fade * delta)

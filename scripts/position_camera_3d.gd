@@ -11,7 +11,7 @@ var movement_offset := Vector3.ZERO
 @onready var ship: Node3D = $"../.."
 @onready var camera_rotation: Node3D = $".."
 @onready var grapin: Node3D = $"../../Grapin/GrapinZone"
-@onready var camera: Camera3D = $Camera3D
+@onready var camera: Camera3D = $MainCamera
 
 func _ready() -> void:
 	offset = base_offset
@@ -38,19 +38,19 @@ func _process(delta: float) -> void:
 	)
 
 	## Adaptation de la caméra en foction des actions
-	if Input.is_action_pressed("throttle_up"):
+	if Input.is_action_pressed("throttle_up") and ship.can_move == 1:
 		offset = lerp(offset, base_offset + Vector3(0, 0, 15), 0.2 * delta)
 		camera.fov = lerp(camera.fov, 100.0, 2.0 * delta)
-	if Input.is_action_pressed("throttle_up_manette") and throttle_up_strength > 0.5:
+	if Input.is_action_pressed("throttle_up_manette") and throttle_up_strength > 0.5 and ship.can_move == 1:
 		offset = lerp(offset, base_offset + Vector3(0, 0, 15), 0.2 * delta)
 		camera.fov = lerp(camera.fov, 100.0, 2.0 * delta)
-	if Input.is_action_pressed("throttle_down_manette") and throttle_down_strength > 0.5:
+	if Input.is_action_pressed("throttle_down_manette") and throttle_down_strength > 0.5 and ship.can_move == 1:
 		offset = lerp(offset, base_offset - Vector3(0, 0, 1), delta) 
 		camera.fov = lerp(camera.fov, 80.0, 2.0 * delta)
-	if Input.is_action_pressed("throttle_down"):
+	if Input.is_action_pressed("throttle_down") and ship.can_move == 1:
 		offset = lerp(offset, base_offset - Vector3(0, 0, 1), delta) 
 		camera.fov = lerp(camera.fov, 80.0, 2.0 * delta)
-	if Input.is_action_pressed("stabilize"):
+	if Input.is_action_pressed("stabilize") and ship.can_move == 1:
 		offset = lerp(offset, base_offset - Vector3(0, 0, 1), 2.0 * delta) 
 		camera.fov = lerp(camera.fov, 80.0, 2.0 * delta)
 

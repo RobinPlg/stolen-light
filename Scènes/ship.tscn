@@ -43,6 +43,10 @@ script = ExtResource("6_xpsff")
 transform = Transform3D(1, 0, 0, 0, 0.99999964, 3.5527137e-15, 0, -3.5527137e-15, 0.9999996, 0, 2.2215996, -9.71092e-08)
 shape = SubResource("CylinderShape3D_4n07m")
 
+[node name="Camera3D" type="Camera3D" parent="." unique_id=2078256337]
+transform = Transform3D(-0.8771211, -1.9605187e-08, 0.4802693, 0.07369805, 0.9881562, 0.1345956, -0.4745811, 0.15345155, -0.8667326, 0.5766133, 0.57078314, -3.2828364)
+fov = 70.0
+
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
 [connection signal="body_entered" from="Grapin/GrapinZone" to="Grapin/GrapinZone" method="_on_body_entered"]
 [connection signal="body_exited" from="Grapin/GrapinZone" to="Grapin/GrapinZone" method="_on_body_exited"]

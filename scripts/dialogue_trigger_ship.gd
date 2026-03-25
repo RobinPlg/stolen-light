@@ -4,6 +4,8 @@ extends Node3D
 @onready var dialogue_animation : AnimationPlayer = get_tree().current_scene.get_node("dialogue_ui/canvas/AnimationPlayer")
 @onready var dialogue_text: RichTextLabel = get_tree().current_scene.get_node("dialogue_ui/canvas/dialogue_text")
 @onready var ship: Node3D = get_tree().current_scene.get_node("Ship")
+@onready var camera_dialogue: Node3D = $"../Ship/Camera3D"
+@onready var main_camera: Node3D = get_tree().current_scene.get_node("Ship/NodeCamera3D/PositionCamera3D/MainCamera")
 
 @export var dialogues: Array[String]
 
@@ -20,6 +22,8 @@ func _physics_process(_delta: float) -> void:
 			continue_dialogue()
 
 func start_dialogue () -> void:
+	camera_dialogue.current = true
+	main_camera.current = false
 	ship.forward_speed = 0.0
 	ship.can_move = 0
 	started = true
@@ -27,6 +31,8 @@ func start_dialogue () -> void:
 	continue_dialogue()
 
 func end_dialogue() -> void:
+	camera_dialogue.current = false
+	main_camera.current = true
 	dialogue_ui.visible = false
 	started = false
 	finished = true

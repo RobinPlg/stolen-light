@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://c1m834k6y8met" path="res://Scripts/planete.gd" id="1_t5m4e"]
 [ext_resource type="ArrayMesh" uid="uid://co7ddj4l8iug7" path="res://Mesh/Planet VOLCAN V1.obj" id="2_k0e2j"]
+[ext_resource type="Texture2D" uid="uid://cdfjdqeycjhax" path="res://Images/chaticon.png" id="3_8ohgv"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_k0e2j"]
 radius = 7.167
@@ -25,6 +26,15 @@ shape = SubResource("CapsuleShape3D_k0e2j")
 transform = Transform3D(2.8101673, -4.038485, 0, 4.038485, 2.8101673, 0, 0, 0, 4.9199996, -0.129711, -0.06776515, 0.8781853)
 layers = 2
 mesh = ExtResource("2_k0e2j")
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=654780420]
+transform = Transform3D(0.9996111, -0.015591247, 0.023121065, 0, 0.82910603, 0.55909175, -0.027886754, -0.5588743, 0.8287836, 0, 9.517882, 13.511909)
+
+[node name="ChatIcon" type="Sprite3D" parent="." unique_id=623654494]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 12.727717, 0)
+visible = false
+billboard = 2
+texture = ExtResource("3_8ohgv")
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
 [connection signal="body_exited" from="." to="." method="_on_body_exited"]

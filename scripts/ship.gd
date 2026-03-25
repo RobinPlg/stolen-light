@@ -20,7 +20,7 @@ extends RigidBody3D
 @export var torque_feedback_strengh : float = 0.15
 
 @onready var node_grapin_ship: Node3D = $NodeGrapinShip
-@onready var camera: Camera3D = $NodeCamera3D/PositionCamera3D/Camera3D
+@onready var camera: Camera3D = $NodeCamera3D/PositionCamera3D/MainCamera
 @onready var grapin : Node3D = $Grapin/GrapinZone
 var planète : RigidBody3D
 
@@ -30,6 +30,7 @@ var pitch_input : float= 0.0
 var roll_input : float= 0.0
 var yaw_input : float= 0.0
 var high_speed : bool= false
+var can_move : int = 1
 var planete_arrimee: RigidBody3D = null
 
 var current_dir: Vector3 = Vector3.ZERO
@@ -47,7 +48,7 @@ func get_input(delta: float) -> void:
 
 	# Clavier
 	if Input.is_action_pressed("throttle_up"):
-		throttle_forward = 1.0
+		throttle_forward = 1.0 
 	if Input.is_action_pressed("throttle_down"):
 		throttle_reverse = 1.0
 
@@ -79,7 +80,7 @@ func get_input(delta: float) -> void:
 		forward_speed,
 		min_speed,
 		max_speed
-	)
+	) * can_move
 
 	if Input.is_action_just_released("stabilize") \
 	or Input.is_action_just_released("throttle_down") \
@@ -145,7 +146,7 @@ func _physics_process(delta: float)->void:
 	torque += transform.basis.z * roll_input * roll_speed
 	torque += transform.basis.x * pitch_input * pitch_speed
 	torque += transform.basis.y * yaw_input * yaw_speed
-	apply_torque(torque)
+	apply_torque(torque * can_move)
 	apply_central_force(-transform.basis.z * forward_speed)
 	
 func update_grapin_random_motion(delta: float) -> void:

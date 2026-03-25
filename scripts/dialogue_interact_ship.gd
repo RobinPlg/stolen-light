@@ -4,6 +4,9 @@ extends Node3D
 @onready var dialogue_animation : AnimationPlayer = get_tree().current_scene.get_node("dialogue_ui/canvas/AnimationPlayer")
 @onready var dialogue_text: RichTextLabel = get_tree().current_scene.get_node("dialogue_ui/canvas/dialogue_text")
 @onready var ship: Node3D = get_tree().current_scene.get_node("Ship")
+@onready var camera_dialogue: Node3D = $"../Ship/Camera3D"
+@onready var chat_icon: Node3D = $"../ChatIcon"
+@onready var main_camera: Node3D = get_tree().current_scene.get_node("Ship/NodeCamera3D/PositionCamera3D/MainCamera")
 
 @export var dialogues: Array[String]
 
@@ -13,20 +16,26 @@ var in_range := false
 var finished := false
 
 func _physics_process(_delta: float) -> void:
-	if not finished:
-		if not started and in_range:
-			start_dialogue()
-		elif started and not finished and Input.is_action_just_pressed("interaction"):
-			continue_dialogue()
-
+	if Input.is_action_just_pressed("interaction"):
+		if not finished:
+			if not started and in_range:
+				start_dialogue()
+			elif started and not finished:
+				continue_dialogue()
+			
 func start_dialogue () -> void:
+	camera_dialogue.current = true
+	main_camera.current = false
 	ship.forward_speed = 0.0
 	ship.can_move = 0
 	started = true
 	dialogue_ui.visible = true
 	continue_dialogue()
 
+
 func end_dialogue() -> void:
+	camera_dialogue.current = false
+	main_camera.current = true
 	dialogue_ui.visible = false
 	started = false
 	finished = true
@@ -46,7 +55,7 @@ func continue_dialogue() -> void:
 func _on_body_entered(body: Node3D) -> void:
 	if body == ship:
 		in_range = true
-
 func _on_body_exited(body: Node3D) -> void:
 	if body == ship:
 		in_range = false
+		chat_icon.visible = false

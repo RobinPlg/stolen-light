@@ -23,15 +23,15 @@ transform = Transform3D(0.57117224, -0.82083046, 0, 0.82083046, 0.57117224, 0, 0
 shape = SubResource("CapsuleShape3D_k0e2j")
 
 [node name="PlaneteMesh" type="MeshInstance3D" parent="." unique_id=1837679391]
-transform = Transform3D(2.8101673, -4.038485, 0, 4.038485, 2.8101673, 0, 0, 0, 4.9199996, -0.129711, -0.06776515, 0.8781853)
+transform = Transform3D(2.8101673, -4.038485, 0, 4.038485, 2.8101673, 0, 0, 0, 4.9199996, 0, 0, 0)
 layers = 2
 mesh = ExtResource("2_k0e2j")
 
 [node name="Camera3D" type="Camera3D" parent="." unique_id=654780420]
-transform = Transform3D(0.9996111, -0.015591247, 0.023121065, 0, 0.82910603, 0.55909175, -0.027886754, -0.5588743, 0.8287836, 0, 9.517882, 13.511909)
+transform = Transform3D(0.9996111, -0.015591253, 0.023121074, 0, 0.8291059, 0.5590917, -0.027886754, -0.55887425, 0.82878345, 4.455605, 9.517882, 13.511909)
 
 [node name="ChatIcon" type="Sprite3D" parent="." unique_id=623654494]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 12.727717, 0)
+transform = Transform3D(1, -5.9604645e-08, 0, 5.9604645e-08, 1, 0, 0, 0, 1, 0, 13.036295, 0)
 visible = false
 billboard = 2
 texture = ExtResource("3_8ohgv")

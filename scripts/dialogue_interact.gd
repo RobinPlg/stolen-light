@@ -24,8 +24,7 @@ func _physics_process(_delta: float) -> void:
 				continue_dialogue()
 			
 func start_dialogue () -> void:
-	camera_dialogue.current = true
-	main_camera.current = false
+	CameraTransition.transition_camera3D(main_camera, camera_dialogue, 2.0) 
 	ship.forward_speed = 0.0
 	ship.can_move = 0
 	started = true
@@ -34,13 +33,13 @@ func start_dialogue () -> void:
 	continue_dialogue()
 
 func end_dialogue() -> void:
-	camera_dialogue.current = false
-	main_camera.current = true
-	dialogue_ui.visible = false
-	started = false
-	finished = true
-	current_dialogue = -1
-	ship.can_move = 1
+	if CameraTransition.transitioning == false:
+		CameraTransition.transition_camera3D(camera_dialogue, main_camera, 2.0)
+		dialogue_ui.visible = false
+		started = false
+		finished = true
+		current_dialogue = -1
+		ship.can_move = 1
 
 func continue_dialogue() -> void:
 	current_dialogue += 1
@@ -53,7 +52,7 @@ func continue_dialogue() -> void:
 
 
 func _on_body_entered(body: Node3D) -> void:
-	if body == ship:
+	if body == ship and not finished:
 		in_range = true
 		chat_icon.visible = true
 func _on_body_exited(body: Node3D) -> void:

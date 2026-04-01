@@ -7,8 +7,10 @@ extends RigidBody3D
 @export var control_smooth := 0.1
 @export var max_control_offset := 10.0
 
+@export_category("Contrôle Planète Arrimée")
 var control_offset := Vector3.ZERO 
 var mouse_delta := Vector2.ZERO
+@export var control_derive_sensi := 0.002
 
 @export_category("Variables Orbite")
 @export var orbit_target : Node3D
@@ -21,6 +23,7 @@ var mouse_delta := Vector2.ZERO
 @export var ship_hook_path: NodePath
 @export var planete_hook_path: NodePath
 var ship: RigidBody3D
+@onready var mesh_planete : Node3D = $"PlaneteMesh"
 
 var ship_hook: Node3D
 var planete_hook: Node3D
@@ -50,7 +53,7 @@ func _input(event: InputEvent) -> void:
 	
 func _physics_process(delta: float)-> void:
 	
-	rotate_y(deg_to_rad(15.0) * delta)
+	mesh_planete.rotate_y(deg_to_rad(15.0) * delta)
 	_lock_to_ship()
 	_handle_planet_control(delta)
 
@@ -124,7 +127,7 @@ func _handle_planet_control(delta: float) -> void:
 		input_vec.y = Input.get_action_strength("view_up") - Input.get_action_strength("view_down")
 
 		if Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
-			input_vec += mouse_delta * 0.002
+			input_vec += mouse_delta * control_derive_sensi
 
 		input_vec = input_vec.limit_length(1.0)
 		

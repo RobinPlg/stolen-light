@@ -8,7 +8,7 @@
 radius = 1.1
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_4n07m"]
-height = 3.0
+height = 5.0
 radius = 2.0
 
 [node name="Ship" type="RigidBody3D" unique_id=1624201241]
@@ -40,7 +40,7 @@ transform = Transform3D(1, 0, 0, 0, 0.99999994, 0, 0, 0, 0.99999994, 0, 0, 0)
 script = ExtResource("6_xpsff")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Grapin/GrapinZone" unique_id=2007083288]
-transform = Transform3D(1, 0, 0, 0, 0.99999964, 3.5527137e-15, 0, -3.5527137e-15, 0.9999996, 0, 2.2215996, -9.71092e-08)
+transform = Transform3D(1, 0, 0, 0, 0.9999995, 3.5527137e-15, 0, -3.5527137e-15, 0.99999946, 0, 2.842358, -1.2424341e-07)
 shape = SubResource("CylinderShape3D_4n07m")
 
 [node name="Camera3D" type="Camera3D" parent="." unique_id=2078256337]

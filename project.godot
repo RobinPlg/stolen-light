@@ -15,6 +15,10 @@ run/main_scene="uid://bpin0d4s4jhdn"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://Images/icon.svg"
 
+[autoload]
+
+CameraTransition="*uid://cuyv22ed2e8tp"
+
 [debug]
 
 gdscript/warnings/untyped_declaration=2

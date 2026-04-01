@@ -8,6 +8,7 @@ extends Node3D
 @onready var main_camera: Node3D = get_tree().current_scene.get_node("Ship/NodeCamera3D/PositionCamera3D/MainCamera")
 
 @export var dialogues: Array[String]
+@export var ease_in : bool
 
 var current_dialogue := -1
 var started := false
@@ -22,8 +23,11 @@ func _physics_process(_delta: float) -> void:
 			continue_dialogue()
 
 func start_dialogue () -> void:
-	camera_dialogue.current = true
-	main_camera.current = false
+	if ease_in:
+		CameraTransition.transition_camera3D(main_camera, camera_dialogue, 2.0)
+	else:
+		main_camera.current = false
+		camera_dialogue.current = true
 	ship.forward_speed = 0.0
 	ship.can_move = 0
 	started = true
@@ -31,13 +35,13 @@ func start_dialogue () -> void:
 	continue_dialogue()
 
 func end_dialogue() -> void:
-	camera_dialogue.current = false
-	main_camera.current = true
-	dialogue_ui.visible = false
-	started = false
-	finished = true
-	current_dialogue = -1
-	ship.can_move = 1
+	if CameraTransition.transitioning == false:
+		CameraTransition.transition_camera3D(camera_dialogue, main_camera, 2.0)
+		dialogue_ui.visible = false
+		started = false
+		finished = true
+		current_dialogue = -1
+		ship.can_move = 1
 
 func continue_dialogue() -> void:
 	current_dialogue += 1

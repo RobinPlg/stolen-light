@@ -50,10 +50,6 @@ emission_energy_multiplier = 2.76
 radius = 1.0
 height = 2.0
 
-[sub_resource type="SphereMesh" id="SphereMesh_tp27u"]
-radius = 0.1
-height = 0.2
-
 [sub_resource type="LabelSettings" id="LabelSettings_exmpl"]
 font_size = 25
 
@@ -122,9 +118,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.218796, -2.2184372, 0.6242
 [node name="GrapinPosition" type="Node3D" parent="Ship/NodeGrapinShip" unique_id=286024543]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.561)
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Ship/NodeGrapinShip/GrapinPosition" unique_id=370415792]
-mesh = SubResource("SphereMesh_tp27u")
-
 [node name="NodeCamera3D" type="Node3D" parent="Ship" unique_id=491686393]
 script = ExtResource("4_ylqxo")
 turn_rate = 75.0
@@ -134,13 +127,14 @@ mouse_sensitivity = 0.02
 script = ExtResource("5_a76ag")
 
 [node name="MainCamera" type="Camera3D" parent="Ship/NodeCamera3D/PositionCamera3D" unique_id=1904995818]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4901893, -0.026209831)
 script = ExtResource("6_tuwyl")
 
 [node name="PlaneteGrosse" parent="." unique_id=1141980245 node_paths=PackedStringArray("orbit_target") instance=ExtResource("11_m2p3x")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 409.09277, 0, -63.12735)
+transform = Transform3D(0.9999394, 0.011012805, 0, -0.011012805, 0.9999394, 0, 0, 0, 1, 409.09277, 0, -63.12735)
 axis_lock_linear_z = false
 max_control_offset = 3.0
-orbit_target = NodePath("../SystèmeSolaire/Sun")
+orbit_target = NodePath("../SystèmeSolaire3/Sun")
 ship_hook_path = NodePath("../Ship/NodeGrapinShip/GrapinPosition")
 planete_hook_path = NodePath("NodeGrapin2")
 
@@ -152,16 +146,13 @@ transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 0, 0, 0)
 dialogues = Array[String](["Right on time.", "Your mission as a planet hauler is to use the magnetic grabber to move the planets I designate to their new star.", "You may ask, 'Why ?'. The star that they currently orbit is coming to an end very soon. And if they're still around when it dies they'll be perfects preys for all the entities lurking in the darkness of the universe...", " However, you don't need to worry about yourself as your ship is designed to keep them far away from you. ", "Anyway, you probably already know what this job involves, so let's start with this inhabitate planets just there."])
 
 [node name="PlaneteRigidBody" parent="." unique_id=462652768 instance=ExtResource("12_2i4e1")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.9700165, -2.3380966, 4.657425)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.9700165, -2.3380966, 10.152566)
 max_control_offset = 3.0
 ship_hook_path = NodePath("../Ship/NodeGrapinShip/GrapinPosition")
 planete_hook_path = NodePath("NodeGrapin2")
 
 [node name="NodeGrapin2" type="Node3D" parent="PlaneteRigidBody" unique_id=679247929]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.0617828)
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="PlaneteRigidBody/NodeGrapin2" unique_id=1931748646]
-mesh = SubResource("SphereMesh_tp27u")
 
 [node name="Control" type="Control" parent="." unique_id=1696648322]
 layout_mode = 3
@@ -221,6 +212,7 @@ expand_mode = 1
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.0093117, -2.2184372, 1.5487947)
 script = ExtResource("15_ylqxo")
 dialogues = Array[String](["Finally, here he is. Almost arrived late on your first day.", " Let's make this quick, I marked the location of your first planets on your onboard computer.", "I'll contact you when you arrive."])
+ease_in = false
 
 [connection signal="body_entered" from="SystèmeSolaire" to="SystèmeSolaire" method="_on_body_entered"]
 [connection signal="body_exited" from="SystèmeSolaire" to="SystèmeSolaire" method="_on_body_exited"]

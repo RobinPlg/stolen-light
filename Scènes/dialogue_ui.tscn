@@ -45,35 +45,22 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="canvas" type="CanvasLayer" parent="." unique_id=1944828378]
-visible = false
-
-[node name="ColorRect" type="ColorRect" parent="canvas" unique_id=5550657]
-anchors_preset = 11
-anchor_left = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -461.0
-offset_top = 94.11
-offset_right = -79.0
-offset_bottom = -92.89136
-grow_horizontal = 0
-grow_vertical = 2
-color = Color(0, 0, 0, 1)
 
 [node name="dialogue_text" type="RichTextLabel" parent="canvas" unique_id=25204343]
-anchors_preset = 6
-anchor_left = 1.0
+anchors_preset = -1
+anchor_left = 0.767
 anchor_top = 0.5
-anchor_right = 1.0
+anchor_right = 0.767
 anchor_bottom = 0.5
-offset_left = -442.0
+offset_left = -173.58405
 offset_top = -212.0
-offset_right = -95.0
+offset_right = 173.41595
 offset_bottom = 207.0
 grow_horizontal = 0
 grow_vertical = 2
-theme_override_font_sizes/normal_font_size = 21
+theme_override_font_sizes/normal_font_size = 29
 text = "blablabla"
+vertical_alignment = 1
 visible_characters = 0
 visible_ratio = 0.0
 

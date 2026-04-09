@@ -10,14 +10,13 @@ extends RigidBody3D
 @export var yaw_speed : float= 1.0
 @export var input_response : float= 5.0
 
-@export_category("Variables Dérive Planète")
-@export var grapin_move_radius: float = 10.0
-@export var grapin_move_speed: float = 0.05
-@export var direction_duration_min: float = 3.0
-@export var direction_duration_max: float = 6.0
-@export var derive_duration_min: float = 5.0
-@export var derive_duration_max: float = 10.0
-@export var torque_feedback_strengh : float = 0.15
+var grapin_move_radius: float
+var grapin_move_speed: float
+var derive_cooldown_min: float
+var derive_cooldown_max: float
+var derive_duration_min: float
+var derive_duration_max: float
+var torque_feedback_strengh : float
 
 @onready var node_grapin_ship: Node3D = $NodeGrapinShip
 @onready var camera: Camera3D = $NodeCamera3D/PositionCamera3D/MainCamera
@@ -34,8 +33,8 @@ var can_move : int = 1
 var planete_arrimee: RigidBody3D = null
 
 var current_dir: Vector3 = Vector3.ZERO
-@onready var dir_timer: float = 0.0
-@onready var timer_derive: float = randf_range(derive_duration_min, derive_duration_max)
+@onready var derive_timer: float = 0.0
+@onready var derive_cooldown: float = randf_range(derive_cooldown_min, derive_cooldown_max)
 var current_duration: float = 0.0
 var grapin_offset: Vector3 = Vector3.ZERO
 var target_dir: Vector3 = Vector3.ZERO
@@ -111,31 +110,46 @@ func get_input(delta: float) -> void:
 
 	if Input.is_action_just_pressed("grab_planete") :
 	
-		## Arrimage Planète
+		## Désarrimage Planète
 		if planete_arrimee:
+			GameState.flags.erase(planete_arrimee.planet_flag)
 			planete_arrimee.ship = null
 			planete_arrimee.can_orbit = true
 			planete_arrimee = null
 
-		## Désarrimage Planète
+		## Arrimage Planète
 		elif grapin.is_planete_here : 
 			planete_arrimee = grapin.planete_ready_to_grab
 			planete_arrimee.can_orbit = false
 			planete_arrimee.ship = self
 			planete_arrimee.orbit_target = null
+			grapin_move_radius = planete_arrimee.grapin_move_radius
+			grapin_move_speed = planete_arrimee.grapin_move_speed
+			derive_duration_min = planete_arrimee.derive_duration_min
+			derive_duration_max = planete_arrimee.derive_duration_max
+			derive_cooldown_min = planete_arrimee.derive_cooldown_min
+			derive_cooldown_max = planete_arrimee.derive_cooldown_max
+			torque_feedback_strengh  = planete_arrimee.torque_feedback_strengh
+			GameState.set_flag(planete_arrimee.planet_flag)
+			print(GameState.flags)
 
 func _physics_process(delta: float)->void:
 	
+	if not GameState.player_can_input:
+		return
+		
 	get_input(delta)
 	
-	if planete_arrimee:
+	if planete_arrimee :
 		update_grapin_random_motion(delta)
-		var torque_feedback := Vector3.ZERO
-		torque_feedback += transform.basis.y * (-planete_arrimee.control_offset.x * torque_feedback_strengh)
-		torque_feedback += transform.basis.x * (-planete_arrimee.control_offset.y * torque_feedback_strengh)
-		apply_torque(torque_feedback)
+		if planete_arrimee.current_input_vec.length() > 0.01:
+			var torque_feedback := Vector3.ZERO
+			torque_feedback += transform.basis.y * (-planete_arrimee.control_offset.x * torque_feedback_strengh)
+			torque_feedback += transform.basis.x * (-planete_arrimee.control_offset.y * torque_feedback_strengh)
+			apply_torque(torque_feedback)
 	else:
 		grapin_offset = grapin_offset.lerp(Vector3.ZERO, 5.0 * delta)
+		apply_torque(Vector3.ZERO)
 		node_grapin_ship.position = grapin_offset
 
 	var torque := Vector3.ZERO
@@ -152,13 +166,12 @@ func _physics_process(delta: float)->void:
 func update_grapin_random_motion(delta: float) -> void:
 
 	if is_deriving:
-		dir_timer -= delta
+		derive_timer -= delta
 		camera.random_strength = 0.005
 		camera.shake()
-		print("dir timer ",dir_timer)
-		if dir_timer <= 0.0:
+		if derive_timer <= 0.0:
 			is_deriving = false
-			timer_derive = randf_range(derive_duration_min, derive_duration_max)
+			derive_cooldown = randf_range(derive_cooldown_min, derive_cooldown_max)
 			return
 			
 		current_dir = current_dir.slerp(target_dir, 3.0 * delta)
@@ -167,17 +180,16 @@ func update_grapin_random_motion(delta: float) -> void:
 		grapin_offset = grapin_offset.lerp(target_offset, grapin_move_speed * delta)
 		
 	else:
-		timer_derive -= delta
-		print("timer derive ", timer_derive)
+		derive_cooldown -= delta
 		grapin_offset = grapin_offset.lerp(Vector3.ZERO, delta)
-		if timer_derive <= 0.0:
+		if derive_cooldown <= 0.0:
 			start_new_derive()
 
 	node_grapin_ship.position = grapin_offset
 	
 func start_new_derive() -> void:
 	is_deriving = true
-	dir_timer = randf_range(direction_duration_min, direction_duration_max)
+	derive_timer = randf_range(derive_duration_min, derive_duration_max)
 	pick_new_random_direction()
 	
 func pick_new_random_direction() -> void:
@@ -196,4 +208,7 @@ func _on_body_entered(body: Node) -> void:
 		
 		linear_velocity = linear_velocity.bounce(collision_normal)
 		
-		forward_speed *= -0.1
+		if body.is_in_group("planete") and planete_arrimee == null:
+			forward_speed *= -0.1
+		elif body.is_in_group("planete") and planete_arrimee != null:
+			forward_speed *= 0.5

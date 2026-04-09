@@ -67,7 +67,7 @@ func check_planete() -> void:
 	
 	## Adaptation de la distance de la caméra en foction de la planète
 	if grapin.planete_ready_to_grab != null and grapin.planete_ready_to_grab.planete_arrimee:
-		if grapin.planete_ready_to_grab.is_in_group("planete-grosse"):
+		if grapin.planete_ready_to_grab.is_in_group("planete-lave"):
 			base_offset = Vector3(0, 0, 30) 
 			return
 		if grapin.planete_ready_to_grab.is_in_group("planete-petite"):

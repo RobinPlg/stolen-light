@@ -1,0 +1,41 @@
+[gd_scene format=3 uid="uid://dh8v06mfcnkc4"]
+
+[ext_resource type="Script" uid="uid://c1m834k6y8met" path="res://Scripts/planete.gd" id="1_t5m4e"]
+[ext_resource type="ArrayMesh" uid="uid://co7ddj4l8iug7" path="res://Mesh/Planet VOLCAN V1.obj" id="2_k0e2j"]
+[ext_resource type="Script" uid="uid://c65gks5m5miwd" path="res://Scènes/eruption_behaviour.gd" id="3_srsuy"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_k0e2j"]
+radius = 7.167
+height = 18.901154
+
+[node name="PlaneteRigidBody" type="RigidBody3D" unique_id=462652768 groups=["planete", "planete-lave"]]
+axis_lock_linear_z = true
+mass = 0.1
+gravity_scale = 0.0
+continuous_cd = true
+contact_monitor = true
+max_contacts_reported = 5
+script = ExtResource("1_t5m4e")
+rotation_axis = Vector3(1, 0.3, 0.5)
+follow_strength = 0.4
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1745756458]
+transform = Transform3D(1.0000002, 0, 0, 0, 0.9930194, -0.11795337, 0, 0.1179534, 0.99301916, 0.01682958, 0.8765347, -0.315483)
+shape = SubResource("CapsuleShape3D_k0e2j")
+
+[node name="PlaneteMesh" type="MeshInstance3D" parent="." unique_id=1837679391]
+transform = Transform3D(4.92, 0, 0, 0, 4.8856544, -0.58033055, 0, 0.58033055, 4.885654, 0, -0.018671334, -0.051876158)
+layers = 2
+mesh = ExtResource("2_k0e2j")
+
+[node name="EruptionBehaviour" type="Node3D" parent="." unique_id=1588490260]
+transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0)
+script = ExtResource("3_srsuy")
+eruption_torque_strength = 8.0
+eruption_force_min = 1.0
+eruption_force_max = 3.0
+eruption_direction_local = Vector3(0, -1, 0)
+eruption_interval_max = 20.0
+
+[node name="EruptionTimer" type="Timer" parent="EruptionBehaviour" unique_id=1073536507]
+autostart = true

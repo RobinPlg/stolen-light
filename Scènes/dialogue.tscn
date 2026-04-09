@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://dk2ky71612t3l"]
+
+[ext_resource type="Script" uid="uid://ddeoln1k8jh64" path="res://Scripts/dialogue.gd" id="1_j3qt8"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_t5uk6"]
+radius = 30.0
+
+[node name="dialogue" type="Node3D" unique_id=825190027]
+script = ExtResource("1_j3qt8")
+
+[node name="trigger" type="Area3D" parent="." unique_id=1423174880]
+
+[node name="collision" type="CollisionShape3D" parent="trigger" unique_id=1567436187]
+shape = SubResource("SphereShape3D_t5uk6")
+debug_color = Color(0.6016431, 0.54455435, 0, 1)
+
+[connection signal="body_entered" from="trigger" to="." method="_on_body_entered"]
+[connection signal="body_exited" from="trigger" to="." method="_on_body_exited"]

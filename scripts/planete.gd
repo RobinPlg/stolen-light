@@ -1,16 +1,21 @@
 extends RigidBody3D
 
+
+@export_category("Rotation Planète")
+@export var rotation_axis: Vector3 = Vector3(0.2, 1.0, 0.1)  
+@export var rotation_speed: float = 15.0
+
 @export_category("Variables Grapin")
 @export var follow_strength := 0.3
 @export var follow_latency := 0.18
 @export var angular_damping := 0.1
-@export var control_smooth := 0.1
-@export var max_control_offset := 10.0
 
-@export_category("Contrôle Planète Arrimée")
+@export_category("Dérive Planète")
+@export var control_smooth := 0.1
+@export var control_derive_sensi := 0.002
+var max_derive_offset := 10.0
 var control_offset := Vector3.ZERO 
 var mouse_delta := Vector2.ZERO
-@export var control_derive_sensi := 0.002
 
 @export_category("Variables Orbite")
 @export var orbit_target : Node3D
@@ -19,7 +24,17 @@ var mouse_delta := Vector2.ZERO
 @export var orbit_strength := 0.02
 @export var orbit_damping := 0.1
 
+@export_category("Variables Dérive Planète")
+@export var grapin_move_radius: float = 10.0
+@export var grapin_move_speed: float = 0.05
+@export var derive_duration_min: float = 3.0
+@export var derive_duration_max: float = 6.0
+@export var derive_cooldown_min: float = 5.0
+@export var derive_cooldown_max: float = 10.0
+@export var torque_feedback_strengh : float = 0.15
+
 @export_category("References")
+@export var planet_flag : String
 @export var ship_hook_path: NodePath
 @export var planete_hook_path: NodePath
 var ship: RigidBody3D
@@ -29,6 +44,7 @@ var ship_hook: Node3D
 var planete_hook: Node3D
 var planete_arrimee : bool
 var can_orbit : bool = true
+var current_input_vec := Vector2.ZERO
 
 func _ready()-> void:
 	
@@ -41,6 +57,8 @@ func _ready()-> void:
 			return
 	global_position = orbit_target.global_position + Vector3(0, 0, orbit_distance)
 	
+	#angular_velocity = rotation_axis.normalized() * deg_to_rad(rotation_speed)
+	
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion:
 		control_smooth = 0.4
@@ -52,8 +70,6 @@ func _input(event: InputEvent) -> void:
 		control_smooth = 0.1
 	
 func _physics_process(delta: float)-> void:
-	
-	mesh_planete.rotate_y(deg_to_rad(15.0) * delta)
 	_lock_to_ship()
 	_handle_planet_control(delta)
 
@@ -64,6 +80,9 @@ func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 		
 	if orbit_target == null: 
 		return
+	
+	var target_angular_velocity := rotation_axis.normalized() * deg_to_rad(rotation_speed)
+	state.angular_velocity = state.angular_velocity.lerp(target_angular_velocity, 0.05)
 	
 	var center := orbit_target.global_position
 	var pos := state.transform.origin
@@ -96,30 +115,25 @@ func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 	
 func _lock_to_ship() -> void:
 	
-		
 	if ship == null: 
 		planete_arrimee = false
 		return
 	
 	planete_arrimee = true
 
-		
 	var desired_transform := Transform3D(ship_hook.global_transform.basis,ship_hook.to_global(control_offset))
 	var locked_transform: Transform3D = desired_transform * planete_hook.transform.affine_inverse()
 
 	global_position = global_position.lerp(locked_transform.origin, follow_strength)
 
-	var current_basis := global_transform.basis
-	var target_basis := locked_transform.basis
-
-	global_transform.basis = current_basis.slerp(target_basis, 0.15)
-
 	linear_velocity = linear_velocity.lerp(ship.linear_velocity, follow_latency)
-
-	angular_velocity *= angular_damping
+	angular_velocity *= angular_damping 
 
 func _handle_planet_control(delta: float) -> void:
 
+	if not GameState.player_can_input:
+		return
+		
 	if planete_arrimee:
 		var input_vec := Vector2.ZERO
 		
@@ -130,6 +144,7 @@ func _handle_planet_control(delta: float) -> void:
 			input_vec += mouse_delta * control_derive_sensi
 
 		input_vec = input_vec.limit_length(1.0)
+		current_input_vec = input_vec
 		
 		mouse_delta = Vector2.ZERO
 		
@@ -141,8 +156,8 @@ func _handle_planet_control(delta: float) -> void:
 		var local_right := Vector3.RIGHT
 		var local_up := Vector3.UP
 
-		var target_offset := (local_right * input_vec.x + local_up * input_vec.y) * max_control_offset
-		target_offset *= max_control_offset
+		var target_offset := (local_right * input_vec.x + local_up * input_vec.y) * max_derive_offset
+		target_offset *= max_derive_offset
 
 		control_offset = control_offset.lerp(
 			target_offset,

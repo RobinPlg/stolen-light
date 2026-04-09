@@ -18,6 +18,7 @@ config/icon="res://Images/icon.svg"
 [autoload]
 
 CameraTransition="*uid://cuyv22ed2e8tp"
+GameState="*uid://b0lypcgbl4nmf"
 
 [debug]
 
@@ -31,9 +32,9 @@ version_control/autoload_on_startup=true
 [global_group]
 
 planete=""
-planete-grosse=""
 planete-petite=""
 orbite=""
+planete-lave=""
 
 [input]
 

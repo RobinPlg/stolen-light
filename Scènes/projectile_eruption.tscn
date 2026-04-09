@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://co45eifke28ed"]
+
+[ext_resource type="Script" uid="uid://dm50ysmgsuoqc" path="res://Scripts/projectile_eruption.gd" id="1_lv783"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_tlbal"]
+radius = 2.0
+height = 4.0
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_52ubq"]
+radius = 2.0
+
+[node name="ProjectileEruption" type="RigidBody3D" unique_id=439699514]
+script = ExtResource("1_lv783")
+speed = 15.0
+lifetime = 10.0
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=102265335]
+mesh = SubResource("SphereMesh_tlbal")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1152550362]
+shape = SubResource("SphereShape3D_52ubq")

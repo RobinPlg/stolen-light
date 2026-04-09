@@ -8,6 +8,7 @@ extends Node3D
 
 var mouse_input: Vector2 = Vector2()
 var current_rotation: Vector3 = Vector3()
+var can_rotate := 1.0
 
 func _ready() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
@@ -24,21 +25,26 @@ func _process(delta: float) -> void:
 		current_rotation.y += look_input.x
 		current_rotation.x += look_input.y
 		current_rotation.x = clampf(current_rotation.x, -90, 90)
+		current_rotation *= can_rotate
 
 		look_input += mouse_input
 		mouse_input = Vector2()
 
 func _input(event: InputEvent) -> void:
 	
+	if event is InputEventKey and event.keycode == KEY_ESCAPE and event.pressed:
+		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	elif event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and Input.mouse_mode == Input.MOUSE_MODE_VISIBLE:
+		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+		
+	if not GameState.player_can_input:
+		return
+	
 	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 		current_rotation.y -= event.relative.x * mouse_sensitivity
 		current_rotation.x -= event.relative.y * mouse_sensitivity
 		current_rotation.x = clampf(current_rotation.x, -90, 90)
 		
-	elif event is InputEventKey and event.keycode == KEY_ESCAPE and event.pressed:
-		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
-	elif event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and Input.mouse_mode == Input.MOUSE_MODE_VISIBLE:
-		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 func get_camera_rotation() -> Vector3:
 	return current_rotation

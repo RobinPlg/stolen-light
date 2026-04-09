@@ -7,14 +7,13 @@
 [ext_resource type="Script" uid="uid://ccpu4ir7ctvmb" path="res://Scripts/position_camera_3d.gd" id="5_a76ag"]
 [ext_resource type="Script" uid="uid://lo3j2tj8q4gm" path="res://Scripts/camera_3d.gd" id="6_tuwyl"]
 [ext_resource type="Script" uid="uid://chus5qrkg8fjk" path="res://Scripts/ui_ship.gd" id="7_6gpsq"]
-[ext_resource type="PackedScene" uid="uid://dk2ky71612t3l" path="res://Scènes/dialogue_interact.tscn" id="8_w5j8c"]
-[ext_resource type="Texture2D" uid="uid://ced4omuaca6fm" path="res://Images/44748.png" id="9_11h7n"]
-[ext_resource type="Texture2D" uid="uid://co1avyowfxa55" path="res://Images/7536-200.png" id="10_g30mb"]
-[ext_resource type="PackedScene" uid="uid://dh8v06mfcnkc4" path="res://Scènes/PlanèteGrosse.tscn" id="11_m2p3x"]
-[ext_resource type="PackedScene" uid="uid://4y07leij14y1" path="res://Scènes/Planète.tscn" id="12_2i4e1"]
+[ext_resource type="PackedScene" uid="uid://dk2ky71612t3l" path="res://Scènes/dialogue.tscn" id="8_w5j8c"]
+[ext_resource type="Texture2D" uid="uid://ci5o35e5unmtt" path="res://Images/44748.png" id="9_11h7n"]
+[ext_resource type="PackedScene" uid="uid://ucyx2johxt4k" path="res://Scènes/chat_icon.tscn" id="9_w5j8c"]
+[ext_resource type="Script" uid="uid://c0osuhwabkxdd" path="res://ressources/camera_change.gd" id="9_ylqxo"]
+[ext_resource type="Texture2D" uid="uid://i2bfgns547kd" path="res://Images/7536-200.png" id="10_g30mb"]
+[ext_resource type="PackedScene" uid="uid://dh8v06mfcnkc4" path="res://Scènes/PlanèteLave.tscn" id="11_m2p3x"]
 [ext_resource type="PackedScene" uid="uid://coi1p4v85fbfg" path="res://Scènes/dialogue_ui.tscn" id="12_hwdle"]
-[ext_resource type="PackedScene" uid="uid://bv4aevsqhtr1i" path="res://Scènes/dialogue_trigger.tscn" id="12_xi2rq"]
-[ext_resource type="Script" uid="uid://bbgnv6orubrb" path="res://Scripts/dialogue_trigger_ship.gd" id="15_ylqxo"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_exmpl"]
 panorama = ExtResource("1_xi2rq")
@@ -49,6 +48,13 @@ emission_energy_multiplier = 2.76
 [sub_resource type="SphereMesh" id="SphereMesh_nf2ur"]
 radius = 1.0
 height = 2.0
+
+[sub_resource type="Resource" id="Resource_a76ag"]
+script = ExtResource("9_ylqxo")
+dialogue_index = 4
+camera_path = NodePath("../Camera_planetelave")
+transition_duration = 2.0
+metadata/_custom_type_script = "uid://c0osuhwabkxdd"
 
 [sub_resource type="LabelSettings" id="LabelSettings_exmpl"]
 font_size = 25
@@ -93,6 +99,23 @@ mesh = SubResource("TorusMesh_ko8qx")
 material_override = SubResource("StandardMaterial3D_ko8qx")
 mesh = SubResource("SphereMesh_nf2ur")
 
+[node name="dialogue_desarrimage" parent="SystèmeSolaire2" unique_id=825190027 instance=ExtResource("8_w5j8c")]
+trigger_type = 1
+detection_radius = 30.0
+cam_on_ship = true
+ease_in_speed = 1.0
+flags_required = Array[String](["Lave"])
+flags_to_set = Array[String](["tuto_finished"])
+dialogues = Array[String](["Now, detach the planets so it can start orbiting."])
+
+[node name="dialogue_tuto_finished" parent="SystèmeSolaire2" unique_id=287147839 instance=ExtResource("8_w5j8c")]
+trigger_type = 1
+detection_radius = 30.0
+cam_on_ship = true
+ease_in_speed = 1.0
+flags_required = Array[String](["tuto_finished"])
+dialogues = Array[String](["Congrats, you  are a true planet hauler.", "The real work starts now, I marked a new planets. Don't dawdle."])
+
 [node name="SystèmeSolaire3" type="Area3D" parent="." unique_id=995717270 groups=["orbite"]]
 transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 10, -2755.7168, 1445.3544, -1969.9928)
 script = ExtResource("2_hwdle")
@@ -114,6 +137,7 @@ mesh = SubResource("SphereMesh_nf2ur")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.218796, -2.2184372, 0.62423706)
 
 [node name="NodeGrapinShip" type="Node3D" parent="Ship" unique_id=337101839]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.9898715)
 
 [node name="GrapinPosition" type="Node3D" parent="Ship/NodeGrapinShip" unique_id=286024543]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.561)
@@ -128,31 +152,38 @@ script = ExtResource("5_a76ag")
 
 [node name="MainCamera" type="Camera3D" parent="Ship/NodeCamera3D/PositionCamera3D" unique_id=1904995818]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4901893, -0.026209831)
+current = true
 script = ExtResource("6_tuwyl")
 
-[node name="PlaneteGrosse" parent="." unique_id=1141980245 node_paths=PackedStringArray("orbit_target") instance=ExtResource("11_m2p3x")]
+[node name="PlaneteLave" parent="." unique_id=1141980245 node_paths=PackedStringArray("orbit_target") instance=ExtResource("11_m2p3x")]
 transform = Transform3D(0.9999394, 0.011012805, 0, -0.011012805, 0.9999394, 0, 0, 0, 1, 409.09277, 0, -63.12735)
 axis_lock_linear_z = false
-max_control_offset = 3.0
-orbit_target = NodePath("../SystèmeSolaire3/Sun")
+orbit_target = NodePath("../SystèmeSolaire/Sun")
+grapin_move_radius = 30.0
+grapin_move_speed = 0.12
+planet_flag = "Lave"
 ship_hook_path = NodePath("../Ship/NodeGrapinShip/GrapinPosition")
 planete_hook_path = NodePath("NodeGrapin2")
 
-[node name="NodeGrapin2" type="Node3D" parent="PlaneteGrosse" unique_id=944601967]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.652153)
+[node name="NodeGrapin2" type="Node3D" parent="PlaneteLave" unique_id=944601967]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -11.232368)
 
-[node name="dialogue_interact" parent="PlaneteGrosse" unique_id=825190027 instance=ExtResource("8_w5j8c")]
+[node name="Camera_planetelave" type="Camera3D" parent="PlaneteLave" unique_id=1472418923]
+transform = Transform3D(0.9996111, -0.015591253, 0.023121074, 0, 0.8291059, 0.5590917, -0.027886754, -0.55887425, 0.82878345, 4.455605, 9.517882, 13.511909)
+
+[node name="dialogue_planetelave" parent="PlaneteLave" unique_id=841299591 node_paths=PackedStringArray("chat_icon") instance=ExtResource("8_w5j8c")]
 transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 0, 0, 0)
-dialogues = Array[String](["Right on time.", "Your mission as a planet hauler is to use the magnetic grabber to move the planets I designate to their new star.", "You may ask, 'Why ?'. The star that they currently orbit is coming to an end very soon. And if they're still around when it dies they'll be perfects preys for all the entities lurking in the darkness of the universe...", " However, you don't need to worry about yourself as your ship is designed to keep them far away from you. ", "Anyway, you probably already know what this job involves, so let's start with this inhabitate planets just there."])
+detection_radius = 2.0
+cam_on_ship = true
+chat_icon = NodePath("../ChatIcon")
+camera_changes = Array[ExtResource("9_ylqxo")]([SubResource("Resource_a76ag")])
+ease_out = false
+ease_in_speed = 1.0
+dialogues = Array[String](["Right on time.", "Your mission as a planet hauler is to use the magnetic grabber to move the planets I designate to their new star.", "You may ask, 'Why ?'. The star that they currently orbit is coming to an end very soon. And if they're still around when it dies they'll be perfects preys for all the entities lurking in the darkness of the universe...", " However, you don't need to worry about yourself as your ship is designed to keep them far away from you. ", "Anyway, you probably already know what this job involves, so let's start with this inhabitate planets just there.", "Good luck."])
 
-[node name="PlaneteRigidBody" parent="." unique_id=462652768 instance=ExtResource("12_2i4e1")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.9700165, -2.3380966, 10.152566)
-max_control_offset = 3.0
-ship_hook_path = NodePath("../Ship/NodeGrapinShip/GrapinPosition")
-planete_hook_path = NodePath("NodeGrapin2")
-
-[node name="NodeGrapin2" type="Node3D" parent="PlaneteRigidBody" unique_id=679247929]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.0617828)
+[node name="ChatIcon" parent="PlaneteLave" unique_id=1129798325 node_paths=PackedStringArray("target") instance=ExtResource("9_w5j8c")]
+transform = Transform3D(1, -5.9604645e-08, 0, 5.9604645e-08, 1, 0, 0, 0, 1, 0, 13.036295, 0)
+target = NodePath("..")
 
 [node name="Control" type="Control" parent="." unique_id=1696648322]
 layout_mode = 3
@@ -208,11 +239,13 @@ expand_mode = 1
 
 [node name="dialogue_ui" parent="." unique_id=399221483 instance=ExtResource("12_hwdle")]
 
-[node name="dialogue_trigger" parent="." unique_id=93987086 instance=ExtResource("12_xi2rq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.0093117, -2.2184372, 1.5487947)
-script = ExtResource("15_ylqxo")
-dialogues = Array[String](["Finally, here he is. Almost arrived late on your first day.", " Let's make this quick, I marked the location of your first planets on your onboard computer.", "I'll contact you when you arrive."])
+[node name="dialogue_spawn" parent="." unique_id=143785073 instance=ExtResource("8_w5j8c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.3532715, -1.7981744, -0.2231102)
+trigger_type = 1
+detection_radius = 10.0
+cam_on_ship = true
 ease_in = false
+dialogues = Array[String](["Finally, here he is.", "Almost arrived late on your first day. Let's make this quick.", " I marked the location of your first planets on your onboard computer, I'll contact you when you arrive."])
 
 [connection signal="body_entered" from="SystèmeSolaire" to="SystèmeSolaire" method="_on_body_entered"]
 [connection signal="body_exited" from="SystèmeSolaire" to="SystèmeSolaire" method="_on_body_exited"]

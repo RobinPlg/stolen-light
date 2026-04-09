@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://ucyx2johxt4k"]
+
+[ext_resource type="Texture2D" uid="uid://cdfjdqeycjhax" path="res://Images/chaticon.png" id="1_cd01o"]
+[ext_resource type="Script" uid="uid://b3vlcy3hj1xre" path="res://Scripts/chat_icon.gd" id="2_k5kk8"]
+
+[node name="ChatIcon2" type="Sprite3D" unique_id=1129798325]
+transform = Transform3D(1, -5.9604645e-08, 0, 5.9604645e-08, 1, 0, 0, 0, 1, 0, 0, 0)
+visible = false
+billboard = 2
+texture = ExtResource("1_cd01o")
+script = ExtResource("2_k5kk8")
